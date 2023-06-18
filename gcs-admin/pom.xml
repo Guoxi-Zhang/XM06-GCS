@@ -60,7 +60,10 @@
             <groupId>com.gcs</groupId>
             <artifactId>gcs-generator</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.gcs</groupId>
+            <artifactId>gcs-apply</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
