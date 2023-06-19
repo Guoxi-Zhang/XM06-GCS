@@ -2,15 +2,18 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gcs.apply.mapper.BenefitApplyMapper">
+<mapper namespace="com.gcs.apply.mapper.ArrearApplyMapper">
     
-    <resultMap type="BenefitApply" id="BenefitApplyResult">
+    <resultMap type="ArrearApply" id="ArrearApplyResult">
         <result property="tableId"    column="table_id"    />
         <result property="studentId"    column="student_id"    />
         <result property="operatorId"    column="operator_id"    />
         <result property="operatorType"    column="operator_type"    />
-        <result property="liveBenefit"    column="live_benefit"    />
-        <result property="travelBenefit"    column="travel_benefit"    />
+        <result property="batchId"    column="batch_id"    />
+        <result property="arrearId"    column="arrear_id"    />
+        <result property="arrearAmount"    column="arrear_amount"    />
+        <result property="arrearReason"    column="arrear_reason"    />
+        <result property="arrearAttn"    column="arrear_attn"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="isDeleted"    column="is_deleted"    />
@@ -18,37 +21,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="applyState"    column="apply_state"    />
     </resultMap>
 
-    <sql id="selectBenefitApplyVo">
-        select table_id, student_id, operator_id, operator_type, live_benefit, travel_benefit, create_time, update_time, is_deleted, now_step, apply_state from benefit_apply
+    <sql id="selectArrearApplyVo">
+        select table_id, student_id, operator_id, operator_type, batch_id, arrear_id, arrear_amount, arrear_reason, arrear_attn, create_time, update_time, is_deleted, now_step, apply_state from arrear_apply
     </sql>
 
-    <select id="selectBenefitApplyList" parameterType="BenefitApply" resultMap="BenefitApplyResult">
-        <include refid="selectBenefitApplyVo"/>
+    <select id="selectArrearApplyList" parameterType="ArrearApply" resultMap="ArrearApplyResult">
+        <include refid="selectArrearApplyVo"/>
         <where>  
             <if test="tableId != null "> and table_id = #{tableId}</if>
             <if test="studentId != null  and studentId != ''"> and student_id like concat('%', #{studentId}, '%')</if>
             <if test="operatorId != null  and operatorId != ''"> and operator_id like concat('%', #{operatorId}, '%')</if>
             <if test="operatorType != null "> and operator_type = #{operatorType}</if>
-            <if test="liveBenefit != null "> and live_benefit &lt;= #{liveBenefit}</if>
-            <if test="travelBenefit != null "> and travel_benefit &lt;= #{travelBenefit}</if>
+            <if test="batchId != null "> and batch_id = #{batchId}</if>
+            <if test="arrearId != null "> and arrear_id = #{arrearId}</if>
+            <if test="arrearAmount != null "> and arrear_amount &lt;= #{arrearAmount}</if>
             <if test="nowStep != null "> and now_step = #{nowStep}</if>
             <if test="applyState != null "> and apply_state = #{applyState}</if>
         </where>
     </select>
     
-    <select id="selectBenefitApplyByTableId" parameterType="Long" resultMap="BenefitApplyResult">
-        <include refid="selectBenefitApplyVo"/>
+    <select id="selectArrearApplyByTableId" parameterType="Long" resultMap="ArrearApplyResult">
+        <include refid="selectArrearApplyVo"/>
         where table_id = #{tableId}
     </select>
         
-    <insert id="insertBenefitApply" parameterType="BenefitApply" useGeneratedKeys="true" keyProperty="tableId">
-        insert into benefit_apply
+    <insert id="insertArrearApply" parameterType="ArrearApply" useGeneratedKeys="true" keyProperty="tableId">
+        insert into arrear_apply
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="studentId != null and studentId != ''">student_id,</if>
             <if test="operatorId != null and operatorId != ''">operator_id,</if>
             <if test="operatorType != null">operator_type,</if>
-            <if test="liveBenefit != null">live_benefit,</if>
-            <if test="travelBenefit != null">travel_benefit,</if>
+            <if test="batchId != null">batch_id,</if>
+            <if test="arrearId != null">arrear_id,</if>
+            <if test="arrearAmount != null">arrear_amount,</if>
+            <if test="arrearReason != null">arrear_reason,</if>
+            <if test="arrearAttn != null">arrear_attn,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="isDeleted != null">is_deleted,</if>
@@ -59,8 +66,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="studentId != null and studentId != ''">#{studentId},</if>
             <if test="operatorId != null and operatorId != ''">#{operatorId},</if>
             <if test="operatorType != null">#{operatorType},</if>
-            <if test="liveBenefit != null">#{liveBenefit},</if>
-            <if test="travelBenefit != null">#{travelBenefit},</if>
+            <if test="batchId != null">#{batchId},</if>
+            <if test="arrearId != null">#{arrearId},</if>
+            <if test="arrearAmount != null">#{arrearAmount},</if>
+            <if test="arrearReason != null">#{arrearReason},</if>
+            <if test="arrearAttn != null">#{arrearAttn},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="isDeleted != null">#{isDeleted},</if>
@@ -69,14 +79,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateBenefitApply" parameterType="BenefitApply">
-        update benefit_apply
+    <update id="updateArrearApply" parameterType="ArrearApply">
+        update arrear_apply
         <trim prefix="SET" suffixOverrides=",">
             <if test="studentId != null and studentId != ''">student_id = #{studentId},</if>
             <if test="operatorId != null and operatorId != ''">operator_id = #{operatorId},</if>
             <if test="operatorType != null">operator_type = #{operatorType},</if>
-            <if test="liveBenefit != null">live_benefit = #{liveBenefit},</if>
-            <if test="travelBenefit != null">travel_benefit = #{travelBenefit},</if>
+            <if test="batchId != null">batch_id = #{batchId},</if>
+            <if test="arrearId != null">arrear_id = #{arrearId},</if>
+            <if test="arrearAmount != null">arrear_amount = #{arrearAmount},</if>
+            <if test="arrearReason != null">arrear_reason = #{arrearReason},</if>
+            <if test="arrearAttn != null">arrear_attn = #{arrearAttn},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
@@ -86,12 +99,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where table_id = #{tableId}
     </update>
 
-    <delete id="deleteBenefitApplyByTableId" parameterType="Long">
-        delete from benefit_apply where table_id = #{tableId}
+    <delete id="deleteArrearApplyByTableId" parameterType="Long">
+        delete from arrear_apply where table_id = #{tableId}
     </delete>
 
-    <delete id="deleteBenefitApplyByTableIds" parameterType="String">
-        delete from benefit_apply where table_id in 
+    <delete id="deleteArrearApplyByTableIds" parameterType="String">
+        delete from arrear_apply where table_id in 
         <foreach item="tableId" collection="array" open="(" separator="," close=")">
             #{tableId}
         </foreach>
