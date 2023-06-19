@@ -6,12 +6,12 @@ import com.gcs.common.annotation.Excel;
 import com.gcs.common.core.domain.BaseEntity;
 
 /**
- * 补助申请对象 benefit_apply
+ * 欠缴费申请对象 arrear_apply
  * 
  * @author xm06-gcs
  * @date 2023-06-19
  */
-public class BenefitApply extends BaseEntity
+public class ArrearApply extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -31,19 +31,30 @@ public class BenefitApply extends BaseEntity
     @Excel(name = "申请单位")
     private Integer operatorType;
 
-    /** 生活补助 */
-    @Excel(name = "生活补助")
-    private Long liveBenefit;
+    /** 欠费批次 */
+    @Excel(name = "欠费批次")
+    private Long batchId;
 
-    /** 路费补助 */
-    @Excel(name = "路费补助")
-    private Long travelBenefit;
+    /** 欠费项目 */
+    @Excel(name = "欠费项目")
+    private Long arrearId;
+
+    /** 缓缴金额 */
+    @Excel(name = "缓缴金额")
+    private Long arrearAmount;
+
+    /** 欠费原因 */
+    @Excel(name = "欠费原因")
+    private String arrearReason;
+
+    /** 证明材料 */
+    private String arrearAttn;
 
     /** 逻辑删除 */
     private Integer isDeleted;
 
-    /** 当前审核单位 */
-    @Excel(name = "当前审核单位")
+    /** 审核单位 */
+    @Excel(name = "审核单位")
     private Long nowStep;
 
     /** 申请状态 */
@@ -86,23 +97,50 @@ public class BenefitApply extends BaseEntity
     {
         return operatorType;
     }
-    public void setLiveBenefit(Long liveBenefit) 
+    public void setBatchId(Long batchId) 
     {
-        this.liveBenefit = liveBenefit;
+        this.batchId = batchId;
     }
 
-    public Long getLiveBenefit() 
+    public Long getBatchId() 
     {
-        return liveBenefit;
+        return batchId;
     }
-    public void setTravelBenefit(Long travelBenefit) 
+    public void setArrearId(Long arrearId) 
     {
-        this.travelBenefit = travelBenefit;
+        this.arrearId = arrearId;
     }
 
-    public Long getTravelBenefit() 
+    public Long getArrearId() 
     {
-        return travelBenefit;
+        return arrearId;
+    }
+    public void setArrearAmount(Long arrearAmount) 
+    {
+        this.arrearAmount = arrearAmount;
+    }
+
+    public Long getArrearAmount() 
+    {
+        return arrearAmount;
+    }
+    public void setArrearReason(String arrearReason) 
+    {
+        this.arrearReason = arrearReason;
+    }
+
+    public String getArrearReason() 
+    {
+        return arrearReason;
+    }
+    public void setArrearAttn(String arrearAttn) 
+    {
+        this.arrearAttn = arrearAttn;
+    }
+
+    public String getArrearAttn() 
+    {
+        return arrearAttn;
     }
     public void setIsDeleted(Integer isDeleted) 
     {
@@ -139,8 +177,11 @@ public class BenefitApply extends BaseEntity
             .append("studentId", getStudentId())
             .append("operatorId", getOperatorId())
             .append("operatorType", getOperatorType())
-            .append("liveBenefit", getLiveBenefit())
-            .append("travelBenefit", getTravelBenefit())
+            .append("batchId", getBatchId())
+            .append("arrearId", getArrearId())
+            .append("arrearAmount", getArrearAmount())
+            .append("arrearReason", getArrearReason())
+            .append("arrearAttn", getArrearAttn())
             .append("createTime", getCreateTime())
             .append("updateTime", getUpdateTime())
             .append("isDeleted", getIsDeleted())
