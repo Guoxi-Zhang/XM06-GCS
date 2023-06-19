@@ -31,6 +31,11 @@ public class ArrearApplyServiceImpl implements IArrearApplyService
     {
         return arrearApplyMapper.selectArrearApplyByTableId(tableId);
     }
+    @Override
+    public ArrearApply selectArrearApplyWithInfoByTableId(Long tableId)
+    {
+        return arrearApplyMapper.selectArrearApplyWithInfoByTableId(tableId);
+    }
 
     /**
      * 查询欠缴费申请列表
@@ -42,6 +47,11 @@ public class ArrearApplyServiceImpl implements IArrearApplyService
     public List<ArrearApply> selectArrearApplyList(ArrearApply arrearApply)
     {
         return arrearApplyMapper.selectArrearApplyList(arrearApply);
+    }
+    @Override
+    public List<ArrearApply> selectArrearApplyListWithInfo(ArrearApply arrearApply)
+    {
+        return arrearApplyMapper.selectArrearApplyListWithInfo(arrearApply);
     }
 
     /**

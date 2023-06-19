@@ -18,6 +18,7 @@ public interface ArrearApplyMapper
      * @return 欠缴费申请
      */
     public ArrearApply selectArrearApplyByTableId(Long tableId);
+    public ArrearApply selectArrearApplyWithInfoByTableId(Long tableId);
 
     /**
      * 查询欠缴费申请列表
@@ -26,6 +27,7 @@ public interface ArrearApplyMapper
      * @return 欠缴费申请集合
      */
     public List<ArrearApply> selectArrearApplyList(ArrearApply arrearApply);
+    public List<ArrearApply> selectArrearApplyListWithInfo(ArrearApply arrearApply);
 
     /**
      * 新增欠缴费申请

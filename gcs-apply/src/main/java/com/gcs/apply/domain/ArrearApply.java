@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.gcs.common.annotation.Excel;
 import com.gcs.common.core.domain.BaseEntity;
 
+import java.math.BigDecimal;
+
 /**
  * 欠缴费申请对象 arrear_apply
  * 
@@ -41,7 +43,7 @@ public class ArrearApply extends BaseEntity
 
     /** 缓缴金额 */
     @Excel(name = "缓缴金额")
-    private Long arrearAmount;
+    private BigDecimal arrearAmount;
 
     /** 欠费原因 */
     @Excel(name = "欠费原因")
@@ -60,6 +62,14 @@ public class ArrearApply extends BaseEntity
     /** 申请状态 */
     @Excel(name = "申请状态")
     private Long applyState;
+
+    /** 表连接：欠费项目名*/
+    @Excel(name = "欠费项目名")
+    private Long arrearName;
+
+    /** 表连接：欠费项目金额*/
+    @Excel(name = "欠费项目名")
+    private BigDecimal arrearCost;
 
     public void setTableId(Long tableId) 
     {
@@ -115,15 +125,25 @@ public class ArrearApply extends BaseEntity
     {
         return arrearId;
     }
-    public void setArrearAmount(Long arrearAmount) 
+    public void setArrearAmount(BigDecimal arrearAmount)
     {
         this.arrearAmount = arrearAmount;
     }
 
-    public Long getArrearAmount() 
+    public BigDecimal getArrearAmount()
     {
         return arrearAmount;
     }
+    public void setArrearCost(BigDecimal arrearCost)
+    {
+        this.arrearCost = arrearCost;
+    }
+
+    public BigDecimal getArrearCost()
+    {
+        return arrearCost;
+    }
+
     public void setArrearReason(String arrearReason) 
     {
         this.arrearReason = arrearReason;

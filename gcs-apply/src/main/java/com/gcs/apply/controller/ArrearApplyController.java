@@ -42,9 +42,15 @@ public class ArrearApplyController extends BaseController
     public TableDataInfo list(ArrearApply arrearApply)
     {
         startPage();
-        List<ArrearApply> list = arrearApplyService.selectArrearApplyList(arrearApply);
+        List<ArrearApply> list = arrearApplyService.selectArrearApplyListWithInfo(arrearApply);
         return getDataTable(list);
     }
+//    public TableDataInfo list(ArrearApply arrearApply)
+//    {
+//        startPage();
+//        List<ArrearApply> list = arrearApplyService.selectArrearApplyList(arrearApply);
+//        return getDataTable(list);
+//    }
 
     /**
      * 导出欠缴费申请列表
@@ -66,7 +72,8 @@ public class ArrearApplyController extends BaseController
     @GetMapping(value = "/{tableId}")
     public AjaxResult getInfo(@PathVariable("tableId") Long tableId)
     {
-        return success(arrearApplyService.selectArrearApplyByTableId(tableId));
+        //return success(arrearApplyService.selectArrearApplyByTableId(tableId));
+        return success(arrearApplyService.selectArrearApplyWithInfoByTableId(tableId));
     }
 
     /**

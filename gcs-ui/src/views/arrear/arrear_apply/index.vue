@@ -44,12 +44,14 @@
         />
       </el-form-item>
       <el-form-item label="欠费项目" prop="arrearId">
-        <el-input
-          v-model="queryParams.arrearId"
-          placeholder="请输入欠费项目"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.arrearId" placeholder="请选择欠费项目" clearable>
+          <el-option
+            v-for="dict in dict.type.arrear_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="缓缴金额" prop="arrearAmount">
         <el-input
@@ -142,9 +144,18 @@
         </template>
       </el-table-column>
       <el-table-column label="欠费批次" align="center" prop="batchId" />
-      <el-table-column label="欠费项目" align="center" prop="arrearId" />
+      <el-table-column label="欠费项目" align="center" prop="arrearId">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.arrear_type" :value="scope.row.arrearId"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="应缴金额" align="center" prop="arrearCost" />
       <el-table-column label="缓缴金额" align="center" prop="arrearAmount" />
-      <el-table-column label="欠费原因" align="center" prop="arrearReason" />
+      <el-table-column label="欠费原因" align="center" prop="arrearReason">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.arrear_reason" :value="scope.row.arrearReason"/>
+        </template>
+      </el-table-column>
       <el-table-column label="申请时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
@@ -179,7 +190,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -198,26 +209,43 @@
           <el-input v-model="form.operatorId" placeholder="请输入申请人学号/工号" />
         </el-form-item>
         <el-form-item label="申请单位" prop="operatorType">
-          <el-select v-model="form.operatorType" placeholder="请选择申请单位">
+        <el-select v-model="form.operatorType" placeholder="请选择申请单位">
+          <el-option
+            v-for="dict in dict.type.applicant_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="parseInt(dict.value)"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+        <el-form-item label="欠费批次" prop="batchId">
+          <el-input v-model="form.batchId" placeholder="请输入欠费批次" />
+        </el-form-item>
+        <el-form-item label="欠费项目" prop="arrearId">
+          <el-select v-model="form.arrearId" placeholder="请选择欠费项目">
             <el-option
-              v-for="dict in dict.type.applicant_type"
+              v-for="dict in dict.type.arrear_type"
               :key="dict.value"
               :label="dict.label"
               :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="欠费批次" prop="batchId">
-          <el-input v-model="form.batchId" placeholder="请输入欠费批次" />
-        </el-form-item>
-        <el-form-item label="欠费项目" prop="arrearId">
-          <el-input v-model="form.arrearId" placeholder="请输入欠费项目" />
+        <el-form-item label="应缴金额" prop="arrearCost">
+          <el-input v-model="form.arrearCost" readonly="readonly"/>
         </el-form-item>
         <el-form-item label="缓缴金额" prop="arrearAmount">
           <el-input v-model="form.arrearAmount" placeholder="请输入缓缴金额" />
         </el-form-item>
         <el-form-item label="欠费原因" prop="arrearReason">
-          <el-input v-model="form.arrearReason" placeholder="请输入欠费原因" />
+          <el-select v-model="form.arrearReason" placeholder="请选择欠费原因">
+            <el-option
+              v-for="dict in dict.type.arrear_reason"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="证明材料" prop="arrearAttn">
           <file-upload v-model="form.arrearAttn"/>
@@ -236,7 +264,7 @@ import { listArrear_apply, getArrear_apply, delArrear_apply, addArrear_apply, up
 
 export default {
   name: "Arrear_apply",
-  dicts: ['verify_unit', 'verify_state', 'applicant_type'],
+  dicts: ['verify_unit', 'verify_state', 'arrear_type', 'applicant_type', 'arrear_reason'],
   data() {
     return {
       // 遮罩层
@@ -268,6 +296,7 @@ export default {
         batchId: null,
         arrearId: null,
         arrearAmount: null,
+        arrearCost: null,
         nowStep: null,
         applyState: null
       },
@@ -288,7 +317,7 @@ export default {
           { required: true, message: "欠费批次不能为空", trigger: "blur" }
         ],
         arrearId: [
-          { required: true, message: "欠费项目不能为空", trigger: "blur" }
+          { required: true, message: "欠费项目不能为空", trigger: "change" }
         ],
         arrearAmount: [
           { required: true, message: "缓缴金额不能为空", trigger: "blur" }
@@ -324,6 +353,7 @@ export default {
         batchId: null,
         arrearId: null,
         arrearAmount: null,
+        arrearCost:null,
         arrearReason: null,
         arrearAttn: null,
         createTime: null,
