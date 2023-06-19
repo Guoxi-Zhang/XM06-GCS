@@ -7,7 +7,7 @@ import com.gcs.apply.domain.BenefitApply;
  * 补助申请Mapper接口
  * 
  * @author xm06-gcs
- * @date 2023-06-18
+ * @date 2023-06-19
  */
 public interface BenefitApplyMapper 
 {

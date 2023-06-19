@@ -9,7 +9,7 @@ import com.gcs.common.core.domain.BaseEntity;
  * 补助申请对象 benefit_apply
  * 
  * @author xm06-gcs
- * @date 2023-06-18
+ * @date 2023-06-19
  */
 public class BenefitApply extends BaseEntity
 {
@@ -41,6 +41,14 @@ public class BenefitApply extends BaseEntity
 
     /** 逻辑删除 */
     private Integer isDeleted;
+
+    /** 当前审核单位 */
+    @Excel(name = "当前审核单位")
+    private Long nowStep;
+
+    /** 申请状态 */
+    @Excel(name = "申请状态")
+    private Long applyState;
 
     public void setTableId(Long tableId) 
     {
@@ -105,6 +113,24 @@ public class BenefitApply extends BaseEntity
     {
         return isDeleted;
     }
+    public void setNowStep(Long nowStep) 
+    {
+        this.nowStep = nowStep;
+    }
+
+    public Long getNowStep() 
+    {
+        return nowStep;
+    }
+    public void setApplyState(Long applyState) 
+    {
+        this.applyState = applyState;
+    }
+
+    public Long getApplyState() 
+    {
+        return applyState;
+    }
 
     @Override
     public String toString() {
@@ -118,6 +144,8 @@ public class BenefitApply extends BaseEntity
             .append("createTime", getCreateTime())
             .append("updateTime", getUpdateTime())
             .append("isDeleted", getIsDeleted())
+            .append("nowStep", getNowStep())
+            .append("applyState", getApplyState())
             .toString();
     }
 }

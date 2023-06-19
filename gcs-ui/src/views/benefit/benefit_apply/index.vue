@@ -25,6 +25,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="申请单位" prop="operatorType">
+        <el-select v-model="queryParams.operatorType" placeholder="请选择申请人单位" clearable>
+          <el-option
+            v-for="dict in dict.type.applicant_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="生活补助" prop="liveBenefit">
         <el-input
           v-model="queryParams.liveBenefit"
@@ -37,6 +47,22 @@
         <el-input
           v-model="queryParams.travelBenefit"
           placeholder="请输入路费补助"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="当前审核单位" prop="nowStep">
+        <el-input
+          v-model="queryParams.nowStep"
+          placeholder="请输入当前审核单位"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="申请状态" prop="applyState">
+        <el-input
+          v-model="queryParams.applyState"
+          placeholder="请输入申请状态"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -98,9 +124,20 @@
       <el-table-column label="申请编号" align="center" prop="tableId" />
       <el-table-column label="学生学号" align="center" prop="studentId" />
       <el-table-column label="申请人学号/工号" align="center" prop="operatorId" />
-      <el-table-column label="申请人单位" align="center" prop="operatorType" />
+      <el-table-column label="申请人单位" align="center" prop="operatorType">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.applicant_type" :value="scope.row.operatorType"/>
+        </template>
+      </el-table-column>
       <el-table-column label="生活补助" align="center" prop="liveBenefit" />
       <el-table-column label="路费补助" align="center" prop="travelBenefit" />
+      <el-table-column label="申请时间" align="center" prop="createTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="当前审核单位" align="center" prop="nowStep" />
+      <el-table-column label="申请状态" align="center" prop="applyState" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -120,7 +157,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -137,6 +174,16 @@
         </el-form-item>
         <el-form-item label="申请人学号/工号" prop="operatorId">
           <el-input v-model="form.operatorId" placeholder="请输入申请人学号/工号" />
+        </el-form-item>
+        <el-form-item label="申请人单位" prop="operatorType">
+          <el-select v-model="form.operatorType" placeholder="请选择申请人单位">
+            <el-option
+              v-for="dict in dict.type.applicant_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="生活补助" prop="liveBenefit">
           <el-input v-model="form.liveBenefit" placeholder="请输入生活补助" />
@@ -158,6 +205,7 @@ import { listBenefit_apply, getBenefit_apply, delBenefit_apply, addBenefit_apply
 
 export default {
   name: "Benefit_apply",
+  dicts: ['applicant_type'],
   data() {
     return {
       // 遮罩层
@@ -188,11 +236,28 @@ export default {
         operatorType: null,
         liveBenefit: null,
         travelBenefit: null,
+        nowStep: null,
+        applyState: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
+        studentId: [
+          { required: true, message: "学生学号不能为空", trigger: "blur" }
+        ],
+        operatorId: [
+          { required: true, message: "申请人学号/工号不能为空", trigger: "blur" }
+        ],
+        operatorType: [
+          { required: true, message: "申请人单位不能为空", trigger: "change" }
+        ],
+        liveBenefit: [
+          { required: true, message: "生活补助不能为空", trigger: "blur" }
+        ],
+        travelBenefit: [
+          { required: true, message: "路费补助不能为空", trigger: "blur" }
+        ],
       }
     };
   },
@@ -225,7 +290,9 @@ export default {
         travelBenefit: null,
         createTime: null,
         updateTime: null,
-        isDeleted: null
+        isDeleted: null,
+        nowStep: null,
+        applyState: null
       };
       this.resetForm("form");
     },
