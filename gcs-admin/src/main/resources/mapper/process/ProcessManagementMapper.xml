@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gcs.admin.mapper.ProcessManagementMapper">
+    
+    <resultMap type="ProcessManagement" id="ProcessManagementResult">
+        <result property="id"    column="id"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="submitTime"    column="submit_time"    />
+        <result property="fundingSource"    column="funding_source"    />
+        <result property="batch"    column="batch"    />
+        <result property="type"    column="type"    />
+        <result property="isDeleted"    column="is_deleted"    />
+    </resultMap>
+
+    <sql id="selectProcessManagementVo">
+        select id, start_time, end_time, submit_time, funding_source, batch, type, is_deleted from process_management
+    </sql>
+
+    <select id="selectProcessManagementList" parameterType="ProcessManagement" resultMap="ProcessManagementResult">
+        <include refid="selectProcessManagementVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="submitTime != null "> and submit_time = #{submitTime}</if>
+            <if test="fundingSource != null "> and funding_source = #{fundingSource}</if>
+            <if test="batch != null "> and batch = #{batch}</if>
+            <if test="type != null "> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectProcessManagementById" parameterType="Long" resultMap="ProcessManagementResult">
+        <include refid="selectProcessManagementVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProcessManagement" parameterType="ProcessManagement" useGeneratedKeys="true" keyProperty="id">
+        insert into process_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="submitTime != null">submit_time,</if>
+            <if test="fundingSource != null">funding_source,</if>
+            <if test="batch != null">batch,</if>
+            <if test="type != null">type,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="submitTime != null">#{submitTime},</if>
+            <if test="fundingSource != null">#{fundingSource},</if>
+            <if test="batch != null">#{batch},</if>
+            <if test="type != null">#{type},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessManagement" parameterType="ProcessManagement">
+        update process_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="submitTime != null">submit_time = #{submitTime},</if>
+            <if test="fundingSource != null">funding_source = #{fundingSource},</if>
+            <if test="batch != null">batch = #{batch},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessManagementById" parameterType="Long">
+        delete from process_management where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessManagementByIds" parameterType="String">
+        delete from process_management where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
