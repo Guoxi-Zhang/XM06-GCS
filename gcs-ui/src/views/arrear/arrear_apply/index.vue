@@ -329,6 +329,18 @@ export default {
     this.getList();
   },
   methods: {
+
+    checkExistingApplication(studentId, batchId, arrearId) {
+      // 调用后端API来查询数据库中是否存在符合条件的记录
+      return checkExistingApplicationAPI(studentId, batchId, arrearId)
+        .then(response => {
+          return response.data;
+        })
+        .catch(error => {
+          console.error(error);
+          return false;
+        });
+    },
     /** 查询欠缴费申请列表 */
     getList() {
       this.loading = true;
@@ -402,16 +414,25 @@ export default {
         if (valid) {
           if (this.form.tableId != null) {
             updateArrear_apply(this.form).then(response => {
+              console.log(response);
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addArrear_apply(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
+            //const existingApplication = this.checkExistingApplication(this.form.studentId, this.form.batchId, this.form.arrearId);
+            // if (existingApplication) {
+            //   // 学生已经申请过该项欠费项目，给出提示
+            //   this.$modal.msgError("该学生已经申请过该项欠费项目");
+            // }
+            // else {
+              addArrear_apply(this.form).then(response => {
+                console.log(response);
+                this.$modal.msgSuccess("新增成功");
+                this.open = false;
+                this.getList();
+              });
+            //}
           }
         }
       });

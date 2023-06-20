@@ -54,6 +54,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join pack_list b on b.table_id = a.table_id
         where a.table_id = #{tableId}
     </select>
+
+    <select id="selectPatchSumByGiftId" parameterType="Long" resultMap="PackApplyPackListResult">
+        select a.gift_inventory
+        from pack_apply a
+        left join pack_list b on b.table_id = a.table_id
+        left join pack_info c on c.gift_id = b.gift_id
+        where a.table_id = #{tableId}
+    </select>
         
     <insert id="insertPackApply" parameterType="PackApply" useGeneratedKeys="true" keyProperty="tableId">
         insert into pack_apply

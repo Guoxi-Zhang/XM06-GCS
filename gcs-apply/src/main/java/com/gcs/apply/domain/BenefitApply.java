@@ -7,7 +7,7 @@ import com.gcs.common.core.domain.BaseEntity;
 
 /**
  * 补助申请对象 benefit_apply
- * 
+ *
  * @author xm06-gcs
  * @date 2023-06-19
  */
@@ -39,6 +39,10 @@ public class BenefitApply extends BaseEntity
     @Excel(name = "路费补助")
     private Long travelBenefit;
 
+    /** 补助批次 */
+    @Excel(name = "补助批次")
+    private Long batchId;
+
     /** 逻辑删除 */
     private Integer isDeleted;
 
@@ -50,84 +54,94 @@ public class BenefitApply extends BaseEntity
     @Excel(name = "申请状态")
     private Long applyState;
 
-    public void setTableId(Long tableId) 
+    public void setTableId(Long tableId)
     {
         this.tableId = tableId;
     }
 
-    public Long getTableId() 
+    public Long getTableId()
     {
         return tableId;
     }
-    public void setStudentId(String studentId) 
+    public void setStudentId(String studentId)
     {
         this.studentId = studentId;
     }
 
-    public String getStudentId() 
+    public String getStudentId()
     {
         return studentId;
     }
-    public void setOperatorId(String operatorId) 
+    public void setOperatorId(String operatorId)
     {
         this.operatorId = operatorId;
     }
 
-    public String getOperatorId() 
+    public String getOperatorId()
     {
         return operatorId;
     }
-    public void setOperatorType(Integer operatorType) 
+    public void setOperatorType(Integer operatorType)
     {
         this.operatorType = operatorType;
     }
 
-    public Integer getOperatorType() 
+    public Integer getOperatorType()
     {
         return operatorType;
     }
-    public void setLiveBenefit(Long liveBenefit) 
+    public void setLiveBenefit(Long liveBenefit)
     {
         this.liveBenefit = liveBenefit;
     }
 
-    public Long getLiveBenefit() 
+    public Long getLiveBenefit()
     {
         return liveBenefit;
     }
-    public void setTravelBenefit(Long travelBenefit) 
+    public void setBatchId(Long batchId)
+    {
+        this.batchId = batchId;
+    }
+
+    public Long getBatchId()
+    {
+        return batchId;
+    }
+
+    public void setTravelBenefit(Long travelBenefit)
     {
         this.travelBenefit = travelBenefit;
     }
 
-    public Long getTravelBenefit() 
+    public Long getTravelBenefit()
     {
         return travelBenefit;
     }
-    public void setIsDeleted(Integer isDeleted) 
+    public void setIsDeleted(Integer isDeleted)
     {
         this.isDeleted = isDeleted;
     }
 
-    public Integer getIsDeleted() 
+    public Integer getIsDeleted()
     {
         return isDeleted;
     }
-    public void setNowStep(Long nowStep) 
+    public void setNowStep(Long nowStep)
     {
         this.nowStep = nowStep;
     }
 
-    public Long getNowStep() 
+    public Long getNowStep()
     {
         return nowStep;
     }
-    public void setApplyState(Long applyState) 
+    public void setApplyState(Long applyState)
     {
         this.applyState = applyState;
     }
 
-    public Long getApplyState() 
+    public Long getApplyState()
     {
         return applyState;
     }
@@ -141,6 +155,7 @@ public class BenefitApply extends BaseEntity
             .append("operatorType", getOperatorType())
             .append("liveBenefit", getLiveBenefit())
             .append("travelBenefit", getTravelBenefit())
+            .append("batchId", getBatchId())
             .append("createTime", getCreateTime())
             .append("updateTime", getUpdateTime())
             .append("isDeleted", getIsDeleted())

@@ -53,6 +53,10 @@ public class ArrearApplyServiceImpl implements IArrearApplyService
     {
         return arrearApplyMapper.selectArrearApplyListWithInfo(arrearApply);
     }
+    public List<ArrearApply> selectArrearApplyWithRepeat(ArrearApply arrearApply)
+    {
+        return arrearApplyMapper.selectArrearApplyWithRepeat(arrearApply);
+    }
 
     /**
      * 新增欠缴费申请

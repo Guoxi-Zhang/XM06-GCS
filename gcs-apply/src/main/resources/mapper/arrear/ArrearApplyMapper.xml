@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tableId != null "> and table_id = #{tableId}</if>
             <if test="studentId != null  and studentId != ''"> and student_id like concat('%', #{studentId}, '%')</if>
             <if test="operatorId != null  and operatorId != ''"> and operator_id like concat('%', #{operatorId}, '%')</if>
-            <if test="operatorType != null "> and operator_type = #{operatorType}</if>
+            <if test="operaarType != null "> and operator_type = #{operatorType}</if>
             <if test="batchId != null "> and batch_id = #{batchId}</if>
             <if test="arrearId != null "> and arrear_id = #{arrearId}</if>
             <if test="arrearAmount != null "> and arrear_amount &lt;= #{arrearAmount}</if>
@@ -63,6 +63,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectArrearApplyByTableId" parameterType="Long" resultMap="ArrearApplyResult">
         <include refid="selectArrearApplyVo"/>
         where table_id = #{tableId}
+    </select>
+
+    <select id="selectArrearApplyWithRepeat" parameterType="ArrearApply" resultMap="ArrearApplyResult">
+        <include refid="selectArrearApplyVo"/>
+        <where>
+            <if test="studentId != null  and studentId != ''"> and student_id = #{studentId}</if>
+            <if test="batchId != null "> and batch_id = #{batchId}</if>
+            <if test="arrearId != null "> and arrear_id = #{arrearId}</if>
+        </where>
     </select>
 
     <select id="selectArrearApplyWithInfoByTableId" parameterType="Long" resultMap="ArrearApplyResult">

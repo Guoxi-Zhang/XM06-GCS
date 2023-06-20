@@ -19,6 +19,7 @@ public interface PackApplyMapper
      * @return 大礼包申请
      */
     public PackApply selectPackApplyByTableId(Long tableId);
+    public PackApply selectPatchSumByGiftId(Long tableId);
 
     /**
      * 查询大礼包申请列表

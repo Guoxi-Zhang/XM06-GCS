@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gcs.apply.mapper.BenefitApplyMapper">
-    
+
     <resultMap type="BenefitApply" id="BenefitApplyResult">
         <result property="tableId"    column="table_id"    />
         <result property="studentId"    column="student_id"    />
@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="operatorType"    column="operator_type"    />
         <result property="liveBenefit"    column="live_benefit"    />
         <result property="travelBenefit"    column="travel_benefit"    />
+        <result property="batchId"    column="batch_id"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="isDeleted"    column="is_deleted"    />
@@ -19,18 +20,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBenefitApplyVo">
-        select table_id, student_id, operator_id, operator_type, live_benefit, travel_benefit, create_time, update_time, is_deleted, now_step, apply_state from benefit_apply
+        select table_id, student_id, operator_id, operator_type, live_benefit, travel_benefit, batch_id, create_time, update_time, is_deleted, now_step, apply_state from benefit_apply
     </sql>
 
     <select id="selectBenefitApplyList" parameterType="BenefitApply" resultMap="BenefitApplyResult">
         <include refid="selectBenefitApplyVo"/>
-        <where>  
+        <where>
             <if test="tableId != null "> and table_id = #{tableId}</if>
             <if test="studentId != null  and studentId != ''"> and student_id like concat('%', #{studentId}, '%')</if>
             <if test="operatorId != null  and operatorId != ''"> and operator_id like concat('%', #{operatorId}, '%')</if>
             <if test="operatorType != null "> and operator_type = #{operatorType}</if>
             <if test="liveBenefit != null "> and live_benefit &lt;= #{liveBenefit}</if>
             <if test="travelBenefit != null "> and travel_benefit &lt;= #{travelBenefit}</if>
+            <if test="batchId != null "> and batch_id = #{batchId}</if>
             <if test="nowStep != null "> and now_step = #{nowStep}</if>
             <if test="applyState != null "> and apply_state = #{applyState}</if>
         </where>
@@ -40,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBenefitApplyVo"/>
         where table_id = #{tableId}
     </select>
-        
+
     <insert id="insertBenefitApply" parameterType="BenefitApply" useGeneratedKeys="true" keyProperty="tableId">
         insert into benefit_apply
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -49,24 +51,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operatorType != null">operator_type,</if>
             <if test="liveBenefit != null">live_benefit,</if>
             <if test="travelBenefit != null">travel_benefit,</if>
+            <if test="batchId != null">batch_id,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="isDeleted != null">is_deleted,</if>
             <if test="nowStep != null">now_step,</if>
             <if test="applyState != null">apply_state,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="studentId != null and studentId != ''">#{studentId},</if>
             <if test="operatorId != null and operatorId != ''">#{operatorId},</if>
             <if test="operatorType != null">#{operatorType},</if>
             <if test="liveBenefit != null">#{liveBenefit},</if>
             <if test="travelBenefit != null">#{travelBenefit},</if>
+            <if test="batchId != null">#{batchId},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="isDeleted != null">#{isDeleted},</if>
             <if test="nowStep != null">#{nowStep},</if>
             <if test="applyState != null">#{applyState},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateBenefitApply" parameterType="BenefitApply">
@@ -77,6 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operatorType != null">operator_type = #{operatorType},</if>
             <if test="liveBenefit != null">live_benefit = #{liveBenefit},</if>
             <if test="travelBenefit != null">travel_benefit = #{travelBenefit},</if>
+            <if test="batchId != null">batch_id = #{batchId},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="isDeleted != null">is_deleted = #{isDeleted},</if>

@@ -4,14 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.gcs.common.annotation.Log;
 import com.gcs.common.core.controller.BaseController;
 import com.gcs.common.core.domain.AjaxResult;
@@ -84,6 +77,18 @@ public class ArrearApplyController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody ArrearApply arrearApply)
     {
+        List<ArrearApply> list = arrearApplyService.selectArrearApplyWithRepeat(arrearApply);
+        Long arrearId = arrearApply.getArrearId();
+        String studentId = arrearApply.getStudentId();
+        Long batchId = arrearApply.getBatchId();
+        System.out.println(arrearId +studentId + batchId);
+        int i = 0;
+        for(ArrearApply x: list){
+            System.out.println(i + " :" + x.toString());
+            if(x.getArrearId() == arrearId && x.getStudentId().equals(studentId) && x.getBatchId() == batchId){
+                return AjaxResult.error("已经存在相同项目！操作失败！");    // 返回error
+            }
+        }
         return toAjax(arrearApplyService.insertArrearApply(arrearApply));
     }
 
