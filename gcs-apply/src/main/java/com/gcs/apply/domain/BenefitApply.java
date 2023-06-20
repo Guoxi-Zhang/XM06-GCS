@@ -21,11 +21,11 @@ public class BenefitApply extends BaseEntity
 
     /** 学生学号 */
     @Excel(name = "学生学号")
-    private String studentId;
+    private Long studentId;
 
     /** 申请人学号/工号 */
     @Excel(name = "申请人学号/工号")
-    private String operatorId;
+    private Long operatorId;
 
     /** 申请单位 */
     @Excel(name = "申请单位")
@@ -63,21 +63,21 @@ public class BenefitApply extends BaseEntity
     {
         return tableId;
     }
-    public void setStudentId(String studentId)
+    public void setStudentId(Long studentId)
     {
         this.studentId = studentId;
     }
 
-    public String getStudentId()
+    public Long getStudentId()
     {
         return studentId;
     }
-    public void setOperatorId(String operatorId)
+    public void setOperatorId(Long operatorId)
     {
         this.operatorId = operatorId;
     }
 
-    public String getOperatorId()
+    public Long getOperatorId()
     {
         return operatorId;
     }

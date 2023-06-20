@@ -79,7 +79,7 @@ public class ArrearApplyController extends BaseController
     {
         List<ArrearApply> list = arrearApplyService.selectArrearApplyWithRepeat(arrearApply);
         Long arrearId = arrearApply.getArrearId();
-        String studentId = arrearApply.getStudentId();
+        Long studentId = arrearApply.getStudentId();
         Long batchId = arrearApply.getBatchId();
         System.out.println(arrearId +studentId + batchId);
         int i = 0;
