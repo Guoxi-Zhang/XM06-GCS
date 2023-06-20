@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gcs.verify.mapper.VerifyHistoryMapper">
+    
+    <resultMap type="VerifyHistory" id="VerifyHistoryResult">
+        <result property="verifyId"    column="verify_id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="applyType"    column="apply_type"    />
+        <result property="verifyPersonId"    column="verify_person_id"    />
+        <result property="verifyAction"    column="verify_action"    />
+        <result property="verifyAdvice"    column="verify_advice"    />
+        <result property="isDeleted"    column="is_deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectVerifyHistoryVo">
+        select verify_id, apply_id, apply_type, verify_person_id, verify_action, verify_advice, is_deleted, create_time, update_time from verify_history
+    </sql>
+
+    <select id="selectVerifyHistoryList" parameterType="VerifyHistory" resultMap="VerifyHistoryResult">
+        <include refid="selectVerifyHistoryVo"/>
+        <where>  
+            <if test="applyId != null "> and apply_id = #{applyId}</if>
+            <if test="applyType != null "> and apply_type = #{applyType}</if>
+            <if test="verifyPersonId != null "> and verify_person_id = #{verifyPersonId}</if>
+            <if test="verifyAction != null "> and verify_action = #{verifyAction}</if>
+            <if test="verifyAdvice != null  and verifyAdvice != ''"> and verify_advice = #{verifyAdvice}</if>
+        </where>
+    </select>
+    
+    <select id="selectVerifyHistoryByVerifyId" parameterType="Long" resultMap="VerifyHistoryResult">
+        <include refid="selectVerifyHistoryVo"/>
+        where verify_id = #{verifyId}
+    </select>
+        
+    <insert id="insertVerifyHistory" parameterType="VerifyHistory" useGeneratedKeys="true" keyProperty="verifyId">
+        insert into verify_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applyId != null">apply_id,</if>
+            <if test="applyType != null">apply_type,</if>
+            <if test="verifyPersonId != null">verify_person_id,</if>
+            <if test="verifyAction != null">verify_action,</if>
+            <if test="verifyAdvice != null">verify_advice,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applyId != null">#{applyId},</if>
+            <if test="applyType != null">#{applyType},</if>
+            <if test="verifyPersonId != null">#{verifyPersonId},</if>
+            <if test="verifyAction != null">#{verifyAction},</if>
+            <if test="verifyAdvice != null">#{verifyAdvice},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVerifyHistory" parameterType="VerifyHistory">
+        update verify_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyId != null">apply_id = #{applyId},</if>
+            <if test="applyType != null">apply_type = #{applyType},</if>
+            <if test="verifyPersonId != null">verify_person_id = #{verifyPersonId},</if>
+            <if test="verifyAction != null">verify_action = #{verifyAction},</if>
+            <if test="verifyAdvice != null">verify_advice = #{verifyAdvice},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where verify_id = #{verifyId}
+    </update>
+
+    <delete id="deleteVerifyHistoryByVerifyId" parameterType="Long">
+        delete from verify_history where verify_id = #{verifyId}
+    </delete>
+
+    <delete id="deleteVerifyHistoryByVerifyIds" parameterType="String">
+        delete from verify_history where verify_id in 
+        <foreach item="verifyId" collection="array" open="(" separator="," close=")">
+            #{verifyId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gcs.verify.mapper.BenefitVerifyMapper">
+
+    <resultMap type="BenefitVerify" id="BenefitVerify">
+        <result property="tableId"    column="table_id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="liveBenefit"    column="live_benefit"    />
+        <result property="travelBenefit"    column="travel_benefit"    />
+        <result property="isDeleted"    column="is_deleted"    />
+        <result property="nowStep"    column="now_step"    />
+        <result property="applyState"    column="apply_state"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="school"    column="school"    />
+        <result property="grade"    column="grade"    />
+        <collection property="verifyHistories" ofType="VerifyHistory">
+            <id property="verifyId"    column="verify_id"    />
+            <result property="applyId" column="apply_id"/>
+            <result property="applyType"    column="apply_type"    />
+            <result property="verifyPersonId"    column="verify_person_id"    />
+            <result property="verifyAction"    column="verify_action"    />
+            <result property="verifyAdvice"    column="verify_advice"    />
+            <result property="isDeleted"    column="is_deleted"    />
+            <result property="verifyPersonName"    column="verify_name"    />
+        </collection>
+    </resultMap>
+
+
+    <select id="selectBenefitVerifyList" parameterType="com.gcs.verify.domain.BenefitVerify" resultMap="BenefitVerify">
+        select table_id, student_id, live_benefit, travel_benefit, now_step, apply_state, user_name student_name,
+               sd1.dept_name grade, sd2.dept_name school
+        from benefit_apply ba
+            left outer join sys_user su on ba.student_id = su.user_id
+            left outer join user_info ui on su.user_id = ui.user_id
+            left outer join sys_dept sd1 on su.dept_id = sd1.dept_id
+            left outer join sys_dept sd2 on sd1.parent_id = sd2.dept_id
+        <where>
+            <if test="tableId != null">
+                and table_id = #{tableId}
+            </if>
+            <if test="studentId != null">
+                and student_id = #{studentId}
+            </if>
+            <if test="tableId != null">
+                and table_id = #{tableId}
+            </if>
+            <if test="grade != null">
+                and sd1.dept_name = #{grade}
+            </if>
+            <if test="school != null">
+                and sd2.dept_name like '%${school}%'
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectVerifyListByApplyId" parameterType="long" resultMap="BenefitVerify">
+        select table_id, student_id, live_benefit, travel_benefit, now_step, apply_state, su.user_name student_name,
+        sd1.dept_name grade, sd2.dept_name school,
+        apply_id, verify_id, apply_type, verify_person_id, verify_action, verify_advice, su2.user_name verify_name
+        from benefit_apply ba
+        left outer join sys_user su on ba.student_id = su.user_id
+        left outer join user_info ui on su.user_id = ui.user_id
+        left outer join sys_dept sd1 on su.dept_id = sd1.dept_id
+        left outer join sys_dept sd2 on sd1.parent_id = sd2.dept_id
+        left outer join verify_history vh on ba.table_id = vh.apply_id
+        left outer join sys_user su2 on vh.verify_person_id = su2.user_id
+        <where>
+            vh.apply_type = 2 and ba.table_id = #{applyId}
+        </where>
+    </select>
+
+    <update id="modifyBenefitApply" parameterType="BenefitVerify">
+        update benefit_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="liveBenefit">live_benefit = #{liveBenefit}</if>
+            <if test="travelBenefit">travel_benefit = #{travelBenefit}</if>
+        </trim>
+        where table_id = #{tableId}
+    </update>
+
+</mapper>

@@ -161,7 +161,20 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
-  }
+  },
+  {
+    path: '/verify/benefit_verify',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:benefit_verify:list'],
+    children: [
+      {
+        path: 'verify_list/:applyId',
+        component: () => import('@/views/verify/benefit_list/verify_list'),
+        name: 'BenefitVerify'
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错

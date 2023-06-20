@@ -175,6 +175,11 @@
             <artifactId>gcs-apply</artifactId>
             <version>${gcs.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.gcs</groupId>
+                <artifactId>gcs-verify</artifactId>
+                <version>${gcs.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -186,6 +191,7 @@
         <module>gcs-generator</module>
         <module>gcs-common</module>
         <module>gcs-apply</module>
+        <module>gcs-verify</module>
     </modules>
     <packaging>pom</packaging>
 
