@@ -163,7 +163,8 @@
             v-model="form.startTime"
             type="date"
             value-format="yyyy-MM-dd"
-            placeholder="请选择学生申请提交开始时间">
+            placeholder="请选择学生申请提交开始时间"
+            :picker-options="startDatePicker">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="学生申请提交结束时间" prop="endTime">
@@ -171,7 +172,8 @@
             v-model="form.endTime"
             type="date"
             value-format="yyyy-MM-dd"
-            placeholder="请选择学生申请提交结束时间">
+            placeholder="请选择学生申请提交结束时间"
+            :picker-options="endDatePicker">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="申请审核提交结束时间" prop="submitTime">
@@ -179,7 +181,8 @@
             v-model="form.submitTime"
             type="date"
             value-format="yyyy-MM-dd"
-            placeholder="请选择申请审核提交结束时间">
+            placeholder="请选择申请审核提交结束时间"
+            :picker-options="submitDatePicker">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="资金来源" prop="fundingSource">
@@ -212,6 +215,9 @@ export default {
   dicts: ['funding_source'],
   data() {
     return {
+      startDatePicker: '',
+      endDatePicker: this.processDate(),
+      submitDatePicker: this.submitprocessDate(),
       // 遮罩层
       loading: true,
       // 选中数组
@@ -361,6 +367,32 @@ export default {
       this.download('process/process_management/export', {
         ...this.queryParams
       }, `process_management_${new Date().getTime()}.xlsx`)
+    },
+    processDate () {
+         const self = this;
+         return {
+           disabledDate (time) {
+             // 如果开始时间不为空，则结束时间大于开始时间
+             if (self.form.startTime) {
+               return new Date(self.form.startTime).getTime() > time.getTime();
+             } else {
+               // 开始时间不选时，结束时间最大值小于等于当天日期
+               return time.getTime() > Date.now();
+             }
+           }
+         };
+    },
+    submitprocessDate () {
+             const self = this;
+             return {
+               disabledDate (time) {
+                 if (self.form.endTime) {
+                   return new Date(self.form.endTime).getTime() > time.getTime();
+                 } else {
+                   return time.getTime() > Date.now();
+                 }
+               }
+             };
     }
   }
 };
