@@ -14,21 +14,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="isDeleted"    column="is_deleted"    />
+        <result property="nowStep"    column="now_step"    />
+        <result property="applyState"    column="apply_state"    />
     </resultMap>
 
     <sql id="selectBenefitApplyVo">
-        select table_id, student_id, operator_id, operator_type, live_benefit, travel_benefit, create_time, update_time, is_deleted from benefit_apply
+        select table_id, student_id, operator_id, operator_type, live_benefit, travel_benefit, create_time, update_time, is_deleted, now_step, apply_state from benefit_apply
     </sql>
 
     <select id="selectBenefitApplyList" parameterType="BenefitApply" resultMap="BenefitApplyResult">
         <include refid="selectBenefitApplyVo"/>
         <where>  
             <if test="tableId != null "> and table_id = #{tableId}</if>
-            <if test="studentId != null  and studentId != ''"> and student_id = #{studentId}</if>
-            <if test="operatorId != null  and operatorId != ''"> and operator_id = #{operatorId}</if>
+            <if test="studentId != null  and studentId != ''"> and student_id like concat('%', #{studentId}, '%')</if>
+            <if test="operatorId != null  and operatorId != ''"> and operator_id like concat('%', #{operatorId}, '%')</if>
             <if test="operatorType != null "> and operator_type = #{operatorType}</if>
-            <if test="liveBenefit != null "> and live_benefit = #{liveBenefit}</if>
-            <if test="travelBenefit != null "> and travel_benefit = #{travelBenefit}</if>
+            <if test="liveBenefit != null "> and live_benefit &lt;= #{liveBenefit}</if>
+            <if test="travelBenefit != null "> and travel_benefit &lt;= #{travelBenefit}</if>
+            <if test="nowStep != null "> and now_step = #{nowStep}</if>
+            <if test="applyState != null "> and apply_state = #{applyState}</if>
         </where>
     </select>
     
@@ -40,38 +44,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertBenefitApply" parameterType="BenefitApply" useGeneratedKeys="true" keyProperty="tableId">
         insert into benefit_apply
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="studentId != null">student_id,</if>
-            <if test="operatorId != null">operator_id,</if>
+            <if test="studentId != null and studentId != ''">student_id,</if>
+            <if test="operatorId != null and operatorId != ''">operator_id,</if>
             <if test="operatorType != null">operator_type,</if>
             <if test="liveBenefit != null">live_benefit,</if>
             <if test="travelBenefit != null">travel_benefit,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="isDeleted != null">is_deleted,</if>
+            <if test="nowStep != null">now_step,</if>
+            <if test="applyState != null">apply_state,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="studentId != null">#{studentId},</if>
-            <if test="operatorId != null">#{operatorId},</if>
+            <if test="studentId != null and studentId != ''">#{studentId},</if>
+            <if test="operatorId != null and operatorId != ''">#{operatorId},</if>
             <if test="operatorType != null">#{operatorType},</if>
             <if test="liveBenefit != null">#{liveBenefit},</if>
             <if test="travelBenefit != null">#{travelBenefit},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="nowStep != null">#{nowStep},</if>
+            <if test="applyState != null">#{applyState},</if>
          </trim>
     </insert>
 
     <update id="updateBenefitApply" parameterType="BenefitApply">
         update benefit_apply
         <trim prefix="SET" suffixOverrides=",">
-            <if test="studentId != null">student_id = #{studentId},</if>
-            <if test="operatorId != null">operator_id = #{operatorId},</if>
+            <if test="studentId != null and studentId != ''">student_id = #{studentId},</if>
+            <if test="operatorId != null and operatorId != ''">operator_id = #{operatorId},</if>
             <if test="operatorType != null">operator_type = #{operatorType},</if>
             <if test="liveBenefit != null">live_benefit = #{liveBenefit},</if>
             <if test="travelBenefit != null">travel_benefit = #{travelBenefit},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            <if test="nowStep != null">now_step = #{nowStep},</if>
+            <if test="applyState != null">apply_state = #{applyState},</if>
         </trim>
         where table_id = #{tableId}
     </update>

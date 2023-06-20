@@ -35,24 +35,34 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="生活补助" prop="liveBenefit">
+      <el-form-item label="欠费批次" prop="batchId">
         <el-input
-          v-model="queryParams.liveBenefit"
-          placeholder="请输入生活补助"
+          v-model="queryParams.batchId"
+          placeholder="请输入欠费批次"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="路费补助" prop="travelBenefit">
+      <el-form-item label="欠费项目" prop="arrearId">
+        <el-select v-model="queryParams.arrearId" placeholder="请选择欠费项目" clearable>
+          <el-option
+            v-for="dict in dict.type.arrear_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="缓缴金额" prop="arrearAmount">
         <el-input
-          v-model="queryParams.travelBenefit"
-          placeholder="请输入路费补助"
+          v-model="queryParams.arrearAmount"
+          placeholder="请输入缓缴金额"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="当前审核单位" prop="nowStep">
-        <el-select v-model="queryParams.nowStep" placeholder="请选择当前审核单位" clearable>
+      <el-form-item label="审核单位" prop="nowStep">
+        <el-select v-model="queryParams.nowStep" placeholder="请选择审核单位" clearable>
           <el-option
             v-for="dict in dict.type.verify_unit"
             :key="dict.value"
@@ -85,7 +95,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['benefit:benefit_apply:add']"
+          v-hasPermi="['arrear:arrear_apply:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -96,7 +106,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['benefit:benefit_apply:edit']"
+          v-hasPermi="['arrear:arrear_apply:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -107,7 +117,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['benefit:benefit_apply:remove']"
+          v-hasPermi="['arrear:arrear_apply:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -117,13 +127,13 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['benefit:benefit_apply:export']"
+          v-hasPermi="['arrear:arrear_apply:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="benefit_applyList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="arrear_applyList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="申请编号" align="center" prop="tableId" />
       <el-table-column label="学生学号" align="center" prop="studentId" />
@@ -133,14 +143,25 @@
           <dict-tag :options="dict.type.applicant_type" :value="scope.row.operatorType"/>
         </template>
       </el-table-column>
-      <el-table-column label="生活补助" align="center" prop="liveBenefit" />
-      <el-table-column label="路费补助" align="center" prop="travelBenefit" />
+      <el-table-column label="欠费批次" align="center" prop="batchId" />
+      <el-table-column label="欠费项目" align="center" prop="arrearId">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.arrear_type" :value="scope.row.arrearId"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="应缴金额" align="center" prop="arrearCost" />
+      <el-table-column label="缓缴金额" align="center" prop="arrearAmount" />
+      <el-table-column label="欠费原因" align="center" prop="arrearReason">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.arrear_reason" :value="scope.row.arrearReason"/>
+        </template>
+      </el-table-column>
       <el-table-column label="申请时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="当前审核单位" align="center" prop="nowStep">
+      <el-table-column label="审核单位" align="center" prop="nowStep">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.verify_unit" :value="scope.row.nowStep"/>
         </template>
@@ -157,19 +178,19 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['benefit:benefit_apply:edit']"
+            v-hasPermi="['arrear:arrear_apply:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['benefit:benefit_apply:remove']"
+            v-hasPermi="['arrear:arrear_apply:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -178,7 +199,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改补助申请对话框 -->
+    <!-- 添加或修改欠缴费申请对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="学生学号" prop="studentId">
@@ -188,20 +209,46 @@
           <el-input v-model="form.operatorId" placeholder="请输入申请人学号/工号" />
         </el-form-item>
         <el-form-item label="申请单位" prop="operatorType">
-          <el-select v-model="form.operatorType" placeholder="请选择申请单位">
+        <el-select v-model="form.operatorType" placeholder="请选择申请单位">
+          <el-option
+            v-for="dict in dict.type.applicant_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="parseInt(dict.value)"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+        <el-form-item label="欠费批次" prop="batchId">
+          <el-input v-model="form.batchId" placeholder="请输入欠费批次" />
+        </el-form-item>
+        <el-form-item label="欠费项目" prop="arrearId">
+          <el-select v-model="form.arrearId" placeholder="请选择欠费项目">
             <el-option
-              v-for="dict in dict.type.applicant_type"
+              v-for="dict in dict.type.arrear_type"
               :key="dict.value"
               :label="dict.label"
               :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="生活补助" prop="liveBenefit">
-          <el-input v-model="form.liveBenefit" placeholder="请输入生活补助" />
+        <el-form-item label="应缴金额" prop="arrearCost">
+          <el-input v-model="form.arrearCost" readonly="readonly"/>
         </el-form-item>
-        <el-form-item label="路费补助" prop="travelBenefit">
-          <el-input v-model="form.travelBenefit" placeholder="请输入路费补助" />
+        <el-form-item label="缓缴金额" prop="arrearAmount">
+          <el-input v-model="form.arrearAmount" placeholder="请输入缓缴金额" />
+        </el-form-item>
+        <el-form-item label="欠费原因" prop="arrearReason">
+          <el-select v-model="form.arrearReason" placeholder="请选择欠费原因">
+            <el-option
+              v-for="dict in dict.type.arrear_reason"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="证明材料" prop="arrearAttn">
+          <file-upload v-model="form.arrearAttn"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -213,11 +260,11 @@
 </template>
 
 <script>
-import { listBenefit_apply, getBenefit_apply, delBenefit_apply, addBenefit_apply, updateBenefit_apply } from "@/api/benefit/benefit_apply";
+import { listArrear_apply, getArrear_apply, delArrear_apply, addArrear_apply, updateArrear_apply } from "@/api/arrear/arrear_apply";
 
 export default {
-  name: "Benefit_apply",
-  dicts: ['verify_unit', 'verify_state', 'applicant_type'],
+  name: "Arrear_apply",
+  dicts: ['verify_unit', 'verify_state', 'arrear_type', 'applicant_type', 'arrear_reason'],
   data() {
     return {
       // 遮罩层
@@ -232,8 +279,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 补助申请表格数据
-      benefit_applyList: [],
+      // 欠缴费申请表格数据
+      arrear_applyList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -246,8 +293,10 @@ export default {
         studentId: null,
         operatorId: null,
         operatorType: null,
-        liveBenefit: null,
-        travelBenefit: null,
+        batchId: null,
+        arrearId: null,
+        arrearAmount: null,
+        arrearCost: null,
         nowStep: null,
         applyState: null
       },
@@ -264,11 +313,14 @@ export default {
         operatorType: [
           { required: true, message: "申请单位不能为空", trigger: "change" }
         ],
-        liveBenefit: [
-          { required: true, message: "生活补助不能为空", trigger: "blur" }
+        batchId: [
+          { required: true, message: "欠费批次不能为空", trigger: "blur" }
         ],
-        travelBenefit: [
-          { required: true, message: "路费补助不能为空", trigger: "blur" }
+        arrearId: [
+          { required: true, message: "欠费项目不能为空", trigger: "change" }
+        ],
+        arrearAmount: [
+          { required: true, message: "缓缴金额不能为空", trigger: "blur" }
         ],
       }
     };
@@ -277,11 +329,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询补助申请列表 */
+    /** 查询欠缴费申请列表 */
     getList() {
       this.loading = true;
-      listBenefit_apply(this.queryParams).then(response => {
-        this.benefit_applyList = response.rows;
+      listArrear_apply(this.queryParams).then(response => {
+        this.arrear_applyList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -298,8 +350,12 @@ export default {
         studentId: null,
         operatorId: null,
         operatorType: null,
-        liveBenefit: null,
-        travelBenefit: null,
+        batchId: null,
+        arrearId: null,
+        arrearAmount: null,
+        arrearCost:null,
+        arrearReason: null,
+        arrearAttn: null,
         createTime: null,
         updateTime: null,
         isDeleted: null,
@@ -328,16 +384,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加补助申请";
+      this.title = "添加欠缴费申请";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const tableId = row.tableId || this.ids
-      getBenefit_apply(tableId).then(response => {
+      getArrear_apply(tableId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改补助申请";
+        this.title = "修改欠缴费申请";
       });
     },
     /** 提交按钮 */
@@ -345,13 +401,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.tableId != null) {
-            updateBenefit_apply(this.form).then(response => {
+            updateArrear_apply(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addBenefit_apply(this.form).then(response => {
+            addArrear_apply(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -363,8 +419,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const tableIds = row.tableId || this.ids;
-      this.$modal.confirm('是否确认删除补助申请编号为"' + tableIds + '"的数据项？').then(function() {
-        return delBenefit_apply(tableIds);
+      this.$modal.confirm('是否确认删除欠缴费申请编号为"' + tableIds + '"的数据项？').then(function() {
+        return delArrear_apply(tableIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -372,9 +428,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('benefit/benefit_apply/export', {
+      this.download('arrear/arrear_apply/export', {
         ...this.queryParams
-      }, `benefit_apply_${new Date().getTime()}.xlsx`)
+      }, `arrear_apply_${new Date().getTime()}.xlsx`)
     }
   }
 };
