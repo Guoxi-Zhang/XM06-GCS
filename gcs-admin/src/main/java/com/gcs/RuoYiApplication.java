@@ -18,7 +18,7 @@ public class RuoYiApplication
         SpringApplication.run(RuoYiApplication.class, args);
         System.out.println(
                 " =============================================\n" +
-                        " ===========高校绿色交易系统启动成功 ===========\n" +
+                        " ===========高校绿色通道系统启动成功 ===========\n" +
                         " ============================================="
         );
     }
