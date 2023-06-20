@@ -132,7 +132,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <insert id="batchPackList">
         insert into pack_list( choose_id, gift_id, table_id, gift_num) values
-		<foreach item="item" index="index" collection="list" separator=",">
+        <foreach item="item" index="index" collection="list" separator=",">
             ( #{item.chooseId}, #{item.giftId}, #{item.tableId}, #{item.giftNum})
         </foreach>
     </insert>

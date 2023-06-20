@@ -7,9 +7,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            访客
+            已帮助学生
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="104" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -20,9 +20,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            消息
+            已审批申请
           </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="272" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -33,9 +33,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            金额
+            已资助金额
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="65280" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -46,12 +46,23 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            订单
+            已购买爱心物品
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="1360" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
+    <div style="margin:200px">
+      <div>
+        <img :src="green4" alt="绿色通道">
+      </div>
+      <div>
+        <img :src="green2" alt="绿色通道">
+      </div>
+      <div>
+        <img :src="green1" alt="绿色通道">
+      </div>
+    </div>
   </el-row>
 
 <!--  <div :class="className" :style="{height:height,width:width}" />-->
@@ -61,6 +72,14 @@
   import CountTo from 'vue-count-to'
 
   export default {
+    data () {
+      return {
+        green1: require('../assets/images/green1.jpg'),
+        green2: require('../assets/images/green2.jpg'),
+        green3: require('../assets/images/green3.jpg'),
+        green4: require('../assets/images/green4.jpg'),
+      }
+    },
     components: {
       CountTo
     },
