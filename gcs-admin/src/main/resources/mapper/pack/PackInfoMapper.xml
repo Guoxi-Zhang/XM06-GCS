@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gcs.pack.mapper.PackInfoMapper">
+    
+    <resultMap type="PackInfo" id="PackInfoResult">
+        <result property="giftId"    column="gift_id"    />
+        <result property="giftName"    column="gift_name"    />
+        <result property="giftPicture"    column="gift_picture"    />
+        <result property="giftSize"    column="gift_size"    />
+        <result property="giftIntroduction"    column="gift_introduction"    />
+        <result property="giftInventory"    column="gift_inventory"    />
+        <result property="isDeleted"    column="is_deleted"    />
+        <result property="giftPrice"    column="gift_price"    />
+        <result property="gender"    column="gender"    />
+        <result property="batchId"    column="batch_id"    />
+        <result property="deptId"    column="dept_id"    />
+    </resultMap>
+
+    <sql id="selectPackInfoVo">
+        select gift_id, gift_name, gift_picture, gift_size, gift_introduction, gift_inventory, is_deleted, gift_price, gender, batch_id, dept_id from pack_info
+    </sql>
+
+    <select id="selectPackInfoList" parameterType="PackInfo" resultMap="PackInfoResult">
+        <include refid="selectPackInfoVo"/>
+        <where>  
+            <if test="giftId != null "> and gift_id = #{giftId}</if>
+            <if test="giftName != null  and giftName != ''"> and gift_name like concat('%', #{giftName}, '%')</if>
+            <if test="giftPicture != null  and giftPicture != ''"> and gift_picture = #{giftPicture}</if>
+            <if test="giftSize != null  and giftSize != ''"> and gift_size = #{giftSize}</if>
+            <if test="giftIntroduction != null  and giftIntroduction != ''"> and gift_introduction = #{giftIntroduction}</if>
+            <if test="giftInventory != null "> and gift_inventory = #{giftInventory}</if>
+            <if test="giftPrice != null "> and gift_price = #{giftPrice}</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="batchId != null "> and batch_id = #{batchId}</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+        </where>
+    </select>
+    
+    <select id="selectPackInfoByGiftId" parameterType="Long" resultMap="PackInfoResult">
+        <include refid="selectPackInfoVo"/>
+        where gift_id = #{giftId}
+    </select>
+        
+    <insert id="insertPackInfo" parameterType="PackInfo" useGeneratedKeys="true" keyProperty="giftId">
+        insert into pack_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="giftName != null and giftName != ''">gift_name,</if>
+            <if test="giftPicture != null and giftPicture != ''">gift_picture,</if>
+            <if test="giftSize != null">gift_size,</if>
+            <if test="giftIntroduction != null and giftIntroduction != ''">gift_introduction,</if>
+            <if test="giftInventory != null">gift_inventory,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+            <if test="giftPrice != null">gift_price,</if>
+            <if test="gender != null and gender != ''">gender,</if>
+            <if test="batchId != null">batch_id,</if>
+            <if test="deptId != null">dept_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="giftName != null and giftName != ''">#{giftName},</if>
+            <if test="giftPicture != null and giftPicture != ''">#{giftPicture},</if>
+            <if test="giftSize != null">#{giftSize},</if>
+            <if test="giftIntroduction != null and giftIntroduction != ''">#{giftIntroduction},</if>
+            <if test="giftInventory != null">#{giftInventory},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="giftPrice != null">#{giftPrice},</if>
+            <if test="gender != null and gender != ''">#{gender},</if>
+            <if test="batchId != null">#{batchId},</if>
+            <if test="deptId != null">#{deptId},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePackInfo" parameterType="PackInfo">
+        update pack_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="giftName != null and giftName != ''">gift_name = #{giftName},</if>
+            <if test="giftPicture != null and giftPicture != ''">gift_picture = #{giftPicture},</if>
+            <if test="giftSize != null">gift_size = #{giftSize},</if>
+            <if test="giftIntroduction != null and giftIntroduction != ''">gift_introduction = #{giftIntroduction},</if>
+            <if test="giftInventory != null">gift_inventory = #{giftInventory},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            <if test="giftPrice != null">gift_price = #{giftPrice},</if>
+            <if test="gender != null and gender != ''">gender = #{gender},</if>
+            <if test="batchId != null">batch_id = #{batchId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+        </trim>
+        where gift_id = #{giftId}
+    </update>
+
+    <delete id="deletePackInfoByGiftId" parameterType="Long">
+        delete from pack_info where gift_id = #{giftId}
+    </delete>
+
+    <delete id="deletePackInfoByGiftIds" parameterType="String">
+        delete from pack_info where gift_id in 
+        <foreach item="giftId" collection="array" open="(" separator="," close=")">
+            #{giftId}
+        </foreach>
+    </delete>
+</mapper>
