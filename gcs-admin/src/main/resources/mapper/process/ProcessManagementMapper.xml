@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gcs.admin.mapper.ProcessManagementMapper">
+<mapper namespace="com.gcs.process.mapper.ProcessManagementMapper">
     
     <resultMap type="ProcessManagement" id="ProcessManagementResult">
         <result property="id"    column="id"    />
@@ -11,12 +11,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="submitTime"    column="submit_time"    />
         <result property="fundingSource"    column="funding_source"    />
         <result property="batch"    column="batch"    />
-        <result property="type"    column="type"    />
         <result property="isDeleted"    column="is_deleted"    />
     </resultMap>
 
     <sql id="selectProcessManagementVo">
-        select id, start_time, end_time, submit_time, funding_source, batch, type, is_deleted from process_management
+        select id, start_time, end_time, submit_time, funding_source, batch, is_deleted from process_management
     </sql>
 
     <select id="selectProcessManagementList" parameterType="ProcessManagement" resultMap="ProcessManagementResult">
@@ -28,7 +27,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitTime != null "> and submit_time = #{submitTime}</if>
             <if test="fundingSource != null "> and funding_source = #{fundingSource}</if>
             <if test="batch != null "> and batch = #{batch}</if>
-            <if test="type != null "> and type = #{type}</if>
         </where>
     </select>
     
@@ -45,7 +43,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitTime != null">submit_time,</if>
             <if test="fundingSource != null">funding_source,</if>
             <if test="batch != null">batch,</if>
-            <if test="type != null">type,</if>
             <if test="isDeleted != null">is_deleted,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -54,7 +51,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitTime != null">#{submitTime},</if>
             <if test="fundingSource != null">#{fundingSource},</if>
             <if test="batch != null">#{batch},</if>
-            <if test="type != null">#{type},</if>
             <if test="isDeleted != null">#{isDeleted},</if>
          </trim>
     </insert>
@@ -67,7 +63,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="submitTime != null">submit_time = #{submitTime},</if>
             <if test="fundingSource != null">funding_source = #{fundingSource},</if>
             <if test="batch != null">batch = #{batch},</if>
-            <if test="type != null">type = #{type},</if>
             <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
         </trim>
         where id = #{id}

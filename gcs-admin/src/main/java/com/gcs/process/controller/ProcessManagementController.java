@@ -1,4 +1,4 @@
-package com.gcs.admin.controller;
+package com.gcs.process.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +16,8 @@ import com.gcs.common.annotation.Log;
 import com.gcs.common.core.controller.BaseController;
 import com.gcs.common.core.domain.AjaxResult;
 import com.gcs.common.enums.BusinessType;
-import com.gcs.admin.domain.ProcessManagement;
-import com.gcs.admin.service.IProcessManagementService;
+import com.gcs.process.domain.ProcessManagement;
+import com.gcs.process.service.IProcessManagementService;
 import com.gcs.common.utils.poi.ExcelUtil;
 import com.gcs.common.core.page.TableDataInfo;
 
@@ -25,7 +25,7 @@ import com.gcs.common.core.page.TableDataInfo;
  * 流程管理Controller
  * 
  * @author xm06-gcs
- * @date 2023-06-19
+ * @date 2023-06-20
  */
 @RestController
 @RequestMapping("/process/process_management")

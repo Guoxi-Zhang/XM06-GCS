@@ -1,4 +1,4 @@
-package com.gcs.admin.domain;
+package com.gcs.process.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -11,14 +11,14 @@ import com.gcs.common.core.domain.BaseEntity;
  * 流程管理对象 process_management
  * 
  * @author xm06-gcs
- * @date 2023-06-19
+ * @date 2023-06-20
  */
 public class ProcessManagement extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /**  */
+    @Excel(name = "")
     private Long id;
 
     /** 学生申请提交开始时间 */
@@ -43,10 +43,6 @@ public class ProcessManagement extends BaseEntity
     /** 批次 */
     @Excel(name = "批次")
     private Long batch;
-
-    /** 流程类型 */
-    @Excel(name = "流程类型")
-    private Long type;
 
     /** 逻辑删除 */
     private Integer isDeleted;
@@ -105,15 +101,6 @@ public class ProcessManagement extends BaseEntity
     {
         return batch;
     }
-    public void setType(Long type) 
-    {
-        this.type = type;
-    }
-
-    public Long getType() 
-    {
-        return type;
-    }
     public void setIsDeleted(Integer isDeleted) 
     {
         this.isDeleted = isDeleted;
@@ -133,7 +120,6 @@ public class ProcessManagement extends BaseEntity
             .append("submitTime", getSubmitTime())
             .append("fundingSource", getFundingSource())
             .append("batch", getBatch())
-            .append("type", getType())
             .append("isDeleted", getIsDeleted())
             .toString();
     }

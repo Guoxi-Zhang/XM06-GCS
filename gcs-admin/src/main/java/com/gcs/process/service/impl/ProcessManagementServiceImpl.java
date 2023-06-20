@@ -1,17 +1,17 @@
-package com.gcs.admin.service.impl;
+package com.gcs.process.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.gcs.admin.mapper.ProcessManagementMapper;
-import com.gcs.admin.domain.ProcessManagement;
-import com.gcs.admin.service.IProcessManagementService;
+import com.gcs.process.mapper.ProcessManagementMapper;
+import com.gcs.process.domain.ProcessManagement;
+import com.gcs.process.service.IProcessManagementService;
 
 /**
  * 流程管理Service业务层处理
  * 
  * @author xm06-gcs
- * @date 2023-06-19
+ * @date 2023-06-20
  */
 @Service
 public class ProcessManagementServiceImpl implements IProcessManagementService 

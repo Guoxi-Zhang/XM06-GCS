@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="160px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="id" prop="id">
         <el-input
           v-model="queryParams.id"
@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="申请提交开始时间" prop="startTime">
+      <el-form-item label="学生申请提交开始时间" prop="startTime">
         <el-date-picker clearable
           v-model="queryParams.startTime"
           type="date"
@@ -17,7 +17,7 @@
           placeholder="请选择学生申请提交开始时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="申请提交结束时间" prop="endTime">
+      <el-form-item label="学生申请提交结束时间" prop="endTime">
         <el-date-picker clearable
           v-model="queryParams.endTime"
           type="date"
@@ -25,7 +25,7 @@
           placeholder="请选择学生申请提交结束时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="审核提交结束时间" prop="submitTime">
+      <el-form-item label="申请审核提交结束时间" prop="submitTime">
         <el-date-picker clearable
           v-model="queryParams.submitTime"
           type="date"
@@ -34,25 +34,19 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="资金来源" prop="fundingSource">
-        <el-input
-          v-model="queryParams.fundingSource"
-          placeholder="请输入资金来源"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.fundingSource" placeholder="请选择资金来源" clearable>
+          <el-option
+            v-for="dict in dict.type.funding_source"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="批次" prop="batch">
         <el-input
           v-model="queryParams.batch"
           placeholder="请输入批次"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="流程类型" prop="type">
-        <el-input
-          v-model="queryParams.type"
-          placeholder="请输入流程类型"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -111,7 +105,7 @@
 
     <el-table v-loading="loading" :data="process_managementList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
+      <el-table-column label="" align="center" prop="id" />
       <el-table-column label="学生申请提交开始时间" align="center" prop="startTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d}') }}</span>
@@ -127,9 +121,12 @@
           <span>{{ parseTime(scope.row.submitTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="资金来源" align="center" prop="fundingSource" />
+      <el-table-column label="资金来源" align="center" prop="fundingSource">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.funding_source" :value="scope.row.fundingSource"/>
+        </template>
+      </el-table-column>
       <el-table-column label="批次" align="center" prop="batch" />
-      <el-table-column label="流程类型" align="center" prop="type" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -159,8 +156,8 @@
     />
 
     <!-- 添加或修改流程管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="200px">
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="学生申请提交开始时间" prop="startTime">
           <el-date-picker clearable
             v-model="form.startTime"
@@ -186,13 +183,17 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="资金来源" prop="fundingSource">
-          <el-input v-model="form.fundingSource" placeholder="请输入资金来源" />
+          <el-select v-model="form.fundingSource" placeholder="请选择资金来源">
+            <el-option
+              v-for="dict in dict.type.funding_source"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="批次" prop="batch">
           <el-input v-model="form.batch" placeholder="请输入批次" />
-        </el-form-item>
-        <el-form-item label="流程类型" prop="type">
-          <el-input v-model="form.type" placeholder="请输入流程类型" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -208,6 +209,7 @@ import { listProcess_management, getProcess_management, delProcess_management, a
 
 export default {
   name: "Process_management",
+  dicts: ['funding_source'],
   data() {
     return {
       // 遮罩层
@@ -238,7 +240,6 @@ export default {
         submitTime: null,
         fundingSource: null,
         batch: null,
-        type: null,
       },
       // 表单参数
       form: {},
@@ -254,13 +255,10 @@ export default {
           { required: true, message: "申请审核提交结束时间不能为空", trigger: "blur" }
         ],
         fundingSource: [
-          { required: true, message: "资金来源不能为空", trigger: "blur" }
+          { required: true, message: "资金来源不能为空", trigger: "change" }
         ],
         batch: [
           { required: true, message: "批次不能为空", trigger: "blur" }
-        ],
-        type: [
-          { required: true, message: "流程类型不能为空", trigger: "blur" }
         ],
       }
     };
@@ -292,7 +290,6 @@ export default {
         submitTime: null,
         fundingSource: null,
         batch: null,
-        type: null,
         isDeleted: null
       };
       this.resetForm("form");
