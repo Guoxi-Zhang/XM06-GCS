@@ -33,17 +33,16 @@ export default {
       num : [],
     }
   },
-  created(){
-    this.$nextTick(() => {
-      this.initChart()
-    })
-  },
+  // created(){
+  //   this.$nextTick(() => {
+  //     this.initChart()
+  //   })
+  // },
   mounted() {
     this.$nextTick(() => {
       this.initChart()
     })
   },
-
 
   beforeDestroy() {
     if (!this.chart) {
@@ -54,9 +53,7 @@ export default {
   },
 
   methods: {
-
     initChart() {
-
       this.chart = echarts.init(this.$el, 'macarons');
       this.reason = [];
       this.number = [];
@@ -64,48 +61,45 @@ export default {
         console.log(response);
         this.reason = JSON.parse(JSON.stringify(response.reason));
         this.number = JSON.parse(JSON.stringify(response.num));
-
+        this.chart.setOption({
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: { // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            }
+          },
+          grid: {
+            top: 10,
+            left: '2%',
+            right: '2%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: [{
+            type: 'category',
+            data: this.reason,
+            axisTick: {
+              alignWithLabel: true
+            }
+          }],
+          yAxis: [{
+            type: 'value',
+            axisTick: {
+              show: false
+            }
+          }],
+          series: [{
+            name: '人数',
+            type: 'bar',
+            stack: 'vistors',
+            barWidth: '60%',
+            data: this.number,
+            animationDuration: animationDuration// animationDuration
+          }],
+        })
         console.log(this.reason);
         console.log(this.number);
       });
-
-      this.chart.setOption({
-
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        grid: {
-          top: 10,
-          left: '2%',
-          right: '2%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [{
-          type: 'category',
-          data: this.reason,
-          axisTick: {
-            alignWithLabel: true
-          }
-        }],
-        yAxis: [{
-          type: 'value',
-          axisTick: {
-            show: false
-          }
-        }],
-        series: [{
-          name: '人数',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: this.number,
-          // animationDuration
-        }],
-      })
 
     }
   }

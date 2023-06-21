@@ -366,17 +366,6 @@ export default {
       this.chart.open = true;
 
     },
-    checkExistingApplication(studentId, batchId, arrearId) {
-      // 调用后端API来查询数据库中是否存在符合条件的记录
-      return checkExistingApplicationAPI(studentId, batchId, arrearId)
-        .then(response => {
-          return response.data;
-        })
-        .catch(error => {
-          console.error(error);
-          return false;
-        });
-    },
     /** 查询欠缴费申请列表 */
     getList() {
       this.loading = true;
