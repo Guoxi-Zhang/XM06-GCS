@@ -28,6 +28,21 @@
         </el-form-item>
       </el-col>
       <el-col :span="8">
+        <el-form-item label="欠费项目" prop="arearId">
+          <dict-tag :options="dict.type.arrear_type" :value="formData.arearId"/>
+        </el-form-item>
+      </el-col>
+      <el-col :span="8">
+        <el-form-item label="应缴金额" prop="arearCost">
+          {{formData.arearCost}}
+        </el-form-item>
+      </el-col>
+      <el-col :span="8">
+        <el-form-item label="欠费原因" prop="arearReason">
+          <dict-tag :options="dict.type.arrear_reason" :value="formData.arearReason"/>
+        </el-form-item>
+      </el-col>
+      <el-col :span="8">
         <el-form-item label="审核单位" prop="nowStep">
           <dict-tag :options="dict.type.verify_unit" :value="formData.nowStep"/>
         </el-form-item>
@@ -38,21 +53,14 @@
         </el-form-item>
       </el-col>
       <el-col :span="24">
-        <el-form-item label="路费补助" prop="travelBenefit">
-          <el-input v-model="formData.travelBenefit" placeholder="请输入路费补助"  :style="{width: '100%'}"
+        <el-form-item label="缓缴金额" prop="arearAmount">
+          <el-input v-model="formData.arearAmount" placeholder="请输入缓缴金额"  :style="{width: '100%'}"
                     v-if="testVerifible()">
           </el-input>
-          <span v-else>{{formData.travelBenefit}}</span>
+          <span v-else>{{formData.arearAmount}}</span>
         </el-form-item>
       </el-col>
-      <el-col :span="24">
-        <el-form-item label="学费补助" prop="liveBenefit">
-          <el-input v-model="formData.liveBenefit" placeholder="请输入学费补助"  :style="{width: '100%'}"
-                    v-if="testVerifible()">
-          </el-input>
-          <span v-else>{{formData.liveBenefit}}</span>
-        </el-form-item>
-      </el-col>
+
       <el-col :span="12" v-if="testVerifible()">
         <el-form-item size="large">
           <el-button type="primary" @click="submitForm">修改</el-button>
@@ -124,11 +132,11 @@
 </template>
 
 <script>
-import { getVerifyListByApplyId, modifyBenefitApply, addBenefitVerify } from "@/api/verify/benefit_list";
+import { getArearVerifyByApplyId, modifyArearApply, addArearVerify } from "@/api/verify/arear_list";
 
 export default {
   name: "Dict",
-  dicts: ['sys_normal_disable', 'verify_action', 'verify_state', 'verify_unit'],
+  dicts: ['sys_normal_disable', 'verify_action', 'verify_state', 'verify_unit', 'arrear_type', 'arrear_reason'],
   data() {
     return {
       // 遮罩层
@@ -163,27 +171,21 @@ export default {
         studentName: undefined,
         school: undefined,
         grade: undefined,
-        travelBenefit: undefined,
-        liveBenefit: undefined,
         nowStep: undefined,
         applyState: undefined,
+
+        arearId: undefined,
+        arearAmount: undefined,
+        arearReason: undefined,
+        arearCost: undefined
       },
       rules: {
-        travelBenefit: [{
+        arearAmount: [{
           required: true,
-          message: '请输入路费补助',
+          message: '请输入缓缴金额',
           trigger: 'blur'
         }, {
           pattern: 81 ,
-          message: '请输入数字',
-          trigger: 'blur'
-        }],
-        liveBenefit: [{
-          required: true,
-          message: '请输入学费补助',
-          trigger: 'blur'
-        }, {
-          pattern: 81,
           message: '请输入数字',
           trigger: 'blur'
         }],
@@ -208,7 +210,7 @@ export default {
     getList() {
       this.loading = true;
       console.log("getVerifyListByApplyId")
-      getVerifyListByApplyId(this.queryParams).then(response => {
+      getArearVerifyByApplyId(this.queryParams).then(response => {
           this.total = response.total;
           this.loading = false;
           if (response.total > 0) {
@@ -217,11 +219,14 @@ export default {
             this.formData.studentName = response.rows[0].studentName
             this.formData.school = response.rows[0].school
             this.formData.grade = response.rows[0].grade
-            this.formData.travelBenefit = response.rows[0].travelBenefit
-            this.formData.liveBenefit = response.rows[0].liveBenefit
             this.formData.nowStep = response.rows[0].nowStep
             this.formData.applyState = response.rows[0].applyState;
             this.verifyList = response.rows[0].verifyHistories;
+
+            this.formData.arearId = response.rows[0].arearId
+            this.formData.arearAmount = response.rows[0].arearAmount
+            this.formData.arearReason = response.rows[0].arearReason
+            this.formData.arearCost = response.rows[0].arearCost
           }
         }
       );
@@ -278,10 +283,9 @@ export default {
       this.$refs['elForm'].validate(valid => {
         if (!valid) return
 
-        modifyBenefitApply({
+        modifyArearApply({
           tableId: this.formData.tableId,
-          liveBenefit: this.formData.liveBenefit,
-          travelBenefit: this.formData.travelBenefit
+          arearAmount: this.formData.arearAmount
         });
         location.reload()
       })
@@ -334,7 +338,7 @@ export default {
         verifyAction: this.form.verifyAction,
         verifyAdvice: this.form.verifyAdvice
       };
-      addBenefitVerify(query);
+      addArearVerify(query);
       this.open = false;
       location.reload()
     }

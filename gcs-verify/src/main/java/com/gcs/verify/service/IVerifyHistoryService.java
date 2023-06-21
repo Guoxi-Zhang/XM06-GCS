@@ -58,4 +58,5 @@ public interface IVerifyHistoryService
      * @return 结果
      */
     public int deleteVerifyHistoryByVerifyId(Long verifyId);
+
 }

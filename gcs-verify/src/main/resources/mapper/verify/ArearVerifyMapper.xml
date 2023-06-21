@@ -2,17 +2,20 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gcs.verify.mapper.BenefitVerifyMapper">
+<mapper namespace="com.gcs.verify.mapper.ArearVerifyMapper">
 
-    <resultMap type="BenefitVerify" id="BenefitVerify">
+    <resultMap type="ArearVerify" id="ArearVerify">
         <result property="tableId"    column="table_id"    />
         <result property="studentId"    column="student_id"    />
-        <result property="liveBenefit"    column="live_benefit"    />
-        <result property="travelBenefit"    column="travel_benefit"    />
-        <result property="isDeleted"    column="is_deleted"    />
+        <result property="batchId"    column="batch_id"    />
+        <result property="arearId"    column="arrear_id"    />
+        <result property="arearAmount"    column="arrear_amount"    />
+        <result property="arearReason"    column="arrear_reason"    />
         <result property="nowStep"    column="now_step"    />
         <result property="applyState"    column="apply_state"    />
         <result property="studentName"    column="student_name"    />
+        <result property="arearName"    column="arrear_name"    />
+        <result property="arearCost"    column="arrear_cost"    />
         <result property="school"    column="school"    />
         <result property="grade"    column="grade"    />
         <collection property="verifyHistories" ofType="VerifyHistory">
@@ -29,14 +32,15 @@
     </resultMap>
 
 
-    <select id="selectBenefitVerifyList" parameterType="com.gcs.verify.domain.BenefitVerify" resultMap="BenefitVerify">
-        select table_id, student_id, live_benefit, travel_benefit, now_step, apply_state, user_name student_name,
-               sd1.dept_name grade, sd2.dept_name school
-        from benefit_apply ba
-            left outer join sys_user su on ba.student_id = su.user_id
-            left outer join user_info ui on su.user_id = ui.user_id
-            left outer join sys_dept sd1 on su.dept_id = sd1.dept_id
-            left outer join sys_dept sd2 on sd1.parent_id = sd2.dept_id
+    <select id="selectArearVerifyList" parameterType="com.gcs.verify.domain.ArearVerify" resultMap="ArearVerify">
+        select table_id, student_id, batch_id, arrear_id, arrear_amount, arrear_reason, now_step, apply_state, user_name student_name,
+        sd1.dept_name grade, sd2.dept_name school, arrear_name, arrear_cost
+        from arrear_apply aa
+        left outer join arrear_info ai on aa.arrear_id = ai.id
+        left outer join sys_user su on aa.student_id = su.user_id
+        left outer join user_info ui on su.user_id = ui.user_id
+        left outer join sys_dept sd1 on su.dept_id = sd1.dept_id
+        left outer join sys_dept sd2 on sd1.parent_id = sd2.dept_id
         <where>
             <if test="tableId != null">
                 and table_id = #{tableId}
@@ -54,37 +58,37 @@
     </select>
 
 
-    <select id="selectVerifyListByApplyId" parameterType="long" resultMap="BenefitVerify">
-        select table_id, student_id, live_benefit, travel_benefit, now_step, apply_state, su.user_name student_name,
-        sd1.dept_name grade, sd2.dept_name school,
+    <select id="selectArearVerifyByApplyId" parameterType="long" resultMap="ArearVerify">
+        select table_id, student_id, batch_id, arrear_id, arrear_amount, arrear_reason, now_step, apply_state, su.user_name student_name,
+        sd1.dept_name grade, sd2.dept_name school, arrear_name, arrear_cost,
         apply_id, verify_id, apply_type, verify_person_id, verify_action, verify_advice, su2.user_name verify_name, verify_unit
-        from benefit_apply ba
-        left outer join sys_user su on ba.student_id = su.user_id
+        from arrear_apply aa
+        left outer join arrear_info ai on aa.arrear_id = ai.id
+        left outer join sys_user su on aa.student_id = su.user_id
         left outer join user_info ui on su.user_id = ui.user_id
         left outer join sys_dept sd1 on su.dept_id = sd1.dept_id
         left outer join sys_dept sd2 on sd1.parent_id = sd2.dept_id
-        left outer join verify_history vh on (vh.apply_type=2 and ba.table_id = vh.apply_id )
+        left outer join verify_history vh on (vh.apply_type=0 and aa.table_id = vh.apply_id )
         left outer join sys_user su2 on vh.verify_person_id = su2.user_id
         <where>
-           ba.table_id = #{applyId}
+            aa.table_id = #{applyId}
         </where>
     </select>
 
-    <update id="modifyBenefitApply" parameterType="BenefitVerify">
-        update benefit_apply
+    <update id="setApplyState">
+        update arrear_apply
+        set now_step = #{nextStage}, apply_state = #{nextState}
+        where table_id = #{applyId}
+    </update>
+
+    <update id="modifyArearApply" parameterType="ArearVerify">
+        update arrear_apply
         <trim prefix="SET" suffixOverrides=",">
-            <if test="liveBenefit != null">live_benefit = #{liveBenefit},</if>
-            <if test="travelBenefit != null">travel_benefit = #{travelBenefit},</if>
+            <if test="arearAmount != null">arrear_amount = #{arearAmount},</if>
             <if test="nowStep != null">now_step = #{nowStep},</if>
             <if test="applyState != null">apply_state = #{applyState},</if>
         </trim>
         where table_id = #{tableId}
-    </update>
-
-    <update id="setApplyState">
-        update benefit_apply
-        set now_step = #{nextStage}, apply_state = #{nextState}
-        where table_id = #{applyId}
     </update>
 
 

@@ -30,6 +30,9 @@ public class VerifyHistory extends BaseEntity
     @Excel(name = "审核人员ID")
     private Long verifyPersonId;
 
+    @Excel(name = "审核单位")
+    private Long verifyUnit;
+
     /** 审核操作：0未操作，1不通过，2驳回，3通过 */
     @Excel(name = "审核操作：0未操作，1不通过，2驳回，3通过")
     private Long verifyAction;
@@ -106,6 +109,14 @@ public class VerifyHistory extends BaseEntity
     public Integer getIsDeleted() 
     {
         return isDeleted;
+    }
+
+    public Long getVerifyUnit() {
+        return verifyUnit;
+    }
+
+    public void setVerifyUnit(Long verifyUnit) {
+        this.verifyUnit = verifyUnit;
     }
 
     public String getVerifyPersonName() {

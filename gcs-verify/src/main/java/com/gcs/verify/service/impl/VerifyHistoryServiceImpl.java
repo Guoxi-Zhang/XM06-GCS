@@ -93,4 +93,6 @@ public class VerifyHistoryServiceImpl implements IVerifyHistoryService
     {
         return verifyHistoryMapper.deleteVerifyHistoryByVerifyId(verifyId);
     }
+
+
 }

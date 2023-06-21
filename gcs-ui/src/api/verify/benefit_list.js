@@ -25,3 +25,20 @@ export function modifyBenefitApply(query) {
     params: query
   })
 }
+
+export function addBenefitVerify(query) {
+  return request({
+    url: '/verify/benefit_list/addBenefitVerify',
+    method: 'post',
+    params: query
+  })
+}
+
+
+export function addBenefitVerifyByApplyIds(query) {
+  return request({
+    url: '/verify/benefit_list/addBenefitVerifyByApplyIds',
+    method: 'post',
+    params: query
+  })
+}

@@ -166,12 +166,25 @@ export const dynamicRoutes = [
     path: '/verify/benefit_verify',
     component: Layout,
     hidden: true,
-    permissions: ['system:benefit_verify:list'],
+    permissions: ['verify:benefit_apply:detail'],
     children: [
       {
         path: 'verify_list/:applyId',
         component: () => import('@/views/verify/benefit_list/verify_list'),
         name: 'BenefitVerify'
+      }
+    ]
+  },
+  {
+    path: '/verify/arear_list',
+    component: Layout,
+    hidden: true,
+    permissions: ['verify:arear_list:detail'],
+    children: [
+      {
+        path: 'verify_list/:applyId',
+        component: () => import('@/views/verify/arear_list/verify_list'),
+        name: 'ArearVerify'
       }
     ]
   },

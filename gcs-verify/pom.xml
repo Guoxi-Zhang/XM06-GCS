@@ -17,5 +17,9 @@
             <artifactId>gcs-common</artifactId>
             <version>${gcs.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.gcs</groupId>
+            <artifactId>gcs-system</artifactId>
+        </dependency>
     </dependencies>
 </project>

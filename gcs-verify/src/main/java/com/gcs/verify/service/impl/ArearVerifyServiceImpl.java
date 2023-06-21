@@ -3,22 +3,22 @@ package com.gcs.verify.service.impl;
 import com.gcs.common.core.domain.entity.SysRole;
 import com.gcs.common.utils.SecurityUtils;
 import com.gcs.system.mapper.SysRoleMapper;
-import com.gcs.verify.domain.BenefitVerify;
+import com.gcs.verify.domain.ArearVerify;
 import com.gcs.verify.domain.VerifyHistory;
-import com.gcs.verify.mapper.BenefitVerifyMapper;
+import com.gcs.verify.mapper.ArearVerifyMapper;
 import com.gcs.verify.mapper.VerifyHistoryMapper;
-import com.gcs.verify.service.IBenefitVerifyService;
+import com.gcs.verify.service.IArearVerifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
+
 
 @Service
-public class BenefitVerifyServiceImpl implements IBenefitVerifyService {
+public class ArearVerifyServiceImpl implements IArearVerifyService {
 
     @Autowired
-    private BenefitVerifyMapper benefitVerifyMapper;
+    private ArearVerifyMapper arearVerifyMapper;
 
     @Autowired
     private VerifyHistoryMapper verifyHistoryMapper;
@@ -26,8 +26,16 @@ public class BenefitVerifyServiceImpl implements IBenefitVerifyService {
     @Autowired
     private SysRoleMapper sysRoleMapper;
 
-    // [cur stage: 0 counselor, 1 school, 2 university]
-    // [verify action: 0 unverified, 1 deny, 2 reject, 3 pass]
+    @Override
+    public List<ArearVerify> selectArearVerifyList(ArearVerify arearVerify) {
+        return arearVerifyMapper.selectArearVerifyList(arearVerify);
+    }
+
+    @Override
+    public ArearVerify selectArearVerifyByApplyId(Long applyId) {
+        return arearVerifyMapper.selectArearVerifyByApplyId(applyId);
+    }
+
     private long[][] nextStageArr = {
             {0, 0, 0, 1},
             {1, 1, 1, 2},
@@ -40,24 +48,40 @@ public class BenefitVerifyServiceImpl implements IBenefitVerifyService {
     };
 
     @Override
-    public List<BenefitVerify> selectBenefitVerifyList(BenefitVerify benefitVerify) {
-        return benefitVerifyMapper.selectBenefitVerifyList(benefitVerify);
-    }
-
-    @Override
-    public BenefitVerify selectVerifyListByApplyId(Long applyId) {
-        return benefitVerifyMapper.selectVerifyListByApplyId(applyId);
-    }
-
-    @Override
-    public int modifyBenefitApply(BenefitVerify benefitVerify) {
+    public int setArearVerify(VerifyHistory verifyHistory) {
         Long userId = SecurityUtils.getUserId();
-        if (benefitVerify.getTableId() == null) return 0;
+        Long verifyUnit = Long.valueOf(getVerifyUnit(userId));
+        int curStage = getCurStage(userId).intValue();
+        int verifyAction = verifyHistory.getVerifyAction().intValue();
+
+        if (curStage == -1) return 0;
+
+        Long nextStage = Long.valueOf(nextStageArr[curStage][verifyAction]);
+        Long nextState = Long.valueOf(nextStateArr[curStage][verifyAction]);
+
+
+
+        verifyHistory.setVerifyPersonId(userId);
+        verifyHistory.setApplyType(new Long(0));
+        verifyHistory.setVerifyUnit(verifyUnit);
+
+        verifyHistoryMapper.insertVerifyHistory(verifyHistory);
+        arearVerifyMapper.setApplyState(verifyHistory.getApplyId(),
+                Long.valueOf(nextStage), Long.valueOf(nextState));
+
+
+        return 1;
+    }
+
+    @Override
+    public int modifyBenefitApply(ArearVerify arearVerify) {
+        Long userId = SecurityUtils.getUserId();
+        if (arearVerify.getTableId() == null) return 0;
         if (isStudent(userId)) {
-            benefitVerify.setApplyState(0);
-            benefitVerify.setNowStep(0);
+            arearVerify.setApplyState(0L);
+            arearVerify.setNowStep(0L);
         }
-        return benefitVerifyMapper.modifyBenefitApply(benefitVerify);
+        return arearVerifyMapper.modifyArearApply(arearVerify);
     }
 
     private boolean isStudent(Long userId) {
@@ -72,30 +96,6 @@ public class BenefitVerifyServiceImpl implements IBenefitVerifyService {
         }
     }
 
-    @Override
-    public int setBenefitVerify(VerifyHistory verifyHistory) {
-        Long userId = SecurityUtils.getUserId();
-        Long verifyUnit = Long.valueOf(getVerifyUnit(userId));
-        int curStage = getCurStage(userId).intValue();
-        int verifyAction = verifyHistory.getVerifyAction().intValue();
-
-        if (curStage == -1) return 0;
-
-        Long nextStage = Long.valueOf(nextStageArr[curStage][verifyAction]);
-        Long nextState = Long.valueOf(nextStateArr[curStage][verifyAction]);
-
-
-        verifyHistory.setVerifyPersonId(userId);
-        verifyHistory.setApplyType(new Long(2));
-        verifyHistory.setVerifyUnit(verifyUnit);
-
-        verifyHistoryMapper.insertVerifyHistory(verifyHistory);
-        benefitVerifyMapper.setApplyState(verifyHistory.getApplyId(),
-                Long.valueOf(nextStage), Long.valueOf(nextState));
-
-
-        return 1;
-    }
 
     private Long getVerifyUnit(Long userId) {
         List<SysRole> sysRoles = sysRoleMapper.selectRolePermissionByUserId(userId);

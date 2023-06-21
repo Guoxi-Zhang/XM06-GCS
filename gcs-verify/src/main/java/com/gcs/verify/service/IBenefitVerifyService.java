@@ -8,7 +8,9 @@ import java.util.List;
 public interface IBenefitVerifyService {
     List<BenefitVerify> selectBenefitVerifyList(BenefitVerify benefitVerify);
 
-    List<VerifyHistory> selectVerifyListByApplyId(Long applyId);
+    BenefitVerify selectVerifyListByApplyId(Long applyId);
 
     int modifyBenefitApply(BenefitVerify benefitVerify);
+
+    int setBenefitVerify(VerifyHistory verifyHistory);
 }

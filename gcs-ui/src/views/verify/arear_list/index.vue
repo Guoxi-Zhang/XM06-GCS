@@ -39,63 +39,74 @@
       </el-form-item>
     </el-form>
 
-<!--    <el-row :gutter="10" class="mb8">-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="primary"-->
-<!--          plain-->
-<!--          icon="el-icon-plus"-->
-<!--          size="mini"-->
-<!--          :disabled="multiple"-->
-<!--          @click="handlePass"-->
-<!--          v-hasPermi="['verify:benefit_list:edit']"-->
-<!--        >通过</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="success"-->
-<!--          plain-->
-<!--          icon="el-icon-edit"-->
-<!--          size="mini"-->
-<!--          :disabled="single"-->
-<!--          @click="handleDeny"-->
-<!--          v-hasPermi="['verify:benefit_list:edit']"-->
-<!--        >不通过</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="danger"-->
-<!--          plain-->
-<!--          icon="el-icon-delete"-->
-<!--          size="mini"-->
-<!--          :disabled="multiple"-->
-<!--          @click="handleReject"-->
-<!--          v-hasPermi="['verify:benefit_list:edit']"-->
-<!--        >驳回</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="warning"-->
-<!--          plain-->
-<!--          icon="el-icon-download"-->
-<!--          size="mini"-->
-<!--          @click="handleExport"-->
-<!--          v-hasPermi="['verify:verify_history:export']"-->
-<!--        >导出</el-button>-->
-<!--      </el-col>-->
-<!--      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>-->
-<!--    </el-row>-->
+    <!--    <el-row :gutter="10" class="mb8">-->
+    <!--      <el-col :span="1.5">-->
+    <!--        <el-button-->
+    <!--          type="primary"-->
+    <!--          plain-->
+    <!--          icon="el-icon-plus"-->
+    <!--          size="mini"-->
+    <!--          :disabled="multiple"-->
+    <!--          @click="handlePass"-->
+    <!--          v-hasPermi="['verify:benefit_list:edit']"-->
+    <!--        >通过</el-button>-->
+    <!--      </el-col>-->
+    <!--      <el-col :span="1.5">-->
+    <!--        <el-button-->
+    <!--          type="success"-->
+    <!--          plain-->
+    <!--          icon="el-icon-edit"-->
+    <!--          size="mini"-->
+    <!--          :disabled="single"-->
+    <!--          @click="handleDeny"-->
+    <!--          v-hasPermi="['verify:benefit_list:edit']"-->
+    <!--        >不通过</el-button>-->
+    <!--      </el-col>-->
+    <!--      <el-col :span="1.5">-->
+    <!--        <el-button-->
+    <!--          type="danger"-->
+    <!--          plain-->
+    <!--          icon="el-icon-delete"-->
+    <!--          size="mini"-->
+    <!--          :disabled="multiple"-->
+    <!--          @click="handleReject"-->
+    <!--          v-hasPermi="['verify:benefit_list:edit']"-->
+    <!--        >驳回</el-button>-->
+    <!--      </el-col>-->
+    <!--      <el-col :span="1.5">-->
+    <!--        <el-button-->
+    <!--          type="warning"-->
+    <!--          plain-->
+    <!--          icon="el-icon-download"-->
+    <!--          size="mini"-->
+    <!--          @click="handleExport"-->
+    <!--          v-hasPermi="['verify:verify_history:export']"-->
+    <!--        >导出</el-button>-->
+    <!--      </el-col>-->
+    <!--      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>-->
+    <!--    </el-row>-->
 
 
-    <el-table v-loading="loading" :data="benefit_applyList" @selection-change="handleSelectionChange">
-<!--      <el-table-column type="selection" width="55" align="center" :selectable="checkSelect"/>-->
+    <el-table v-loading="loading" :data="arear_applyList" @selection-change="handleSelectionChange">
+      <!--      <el-table-column type="selection" width="55" align="center" :selectable="checkSelect"/>-->
       <el-table-column label="申请编号" align="center" prop="tableId" />
+      <el-table-column label="申请批次" align="center" prop="batchId" />
       <el-table-column label="学生学号" align="center" prop="studentId" />
       <el-table-column label="学生姓名" align="center" prop="studentName" />
       <el-table-column label="学院" align="center" prop="school" />
       <el-table-column label="年级" align="center" prop="grade" />
-      <el-table-column label="生活补助" align="center" prop="liveBenefit" />
-      <el-table-column label="路费补助" align="center" prop="travelBenefit" />
+      <el-table-column label="欠费项目" align="center" prop="arearId" >
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.arrear_type" :value="scope.row.arearId"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="应缴金额" align="center" prop="arearCost" />
+      <el-table-column label="缓缴金额" align="center" prop="arearAmount" />
+      <el-table-column label="缓缴原因" align="center" prop="arearReason" >
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.arrear_reason" :value="scope.row.arearReason"/>
+        </template>
+      </el-table-column>
       <el-table-column label="待审核单位" align="center" prop="nowStep">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.verify_unit" :value="scope.row.nowStep"/>
@@ -112,9 +123,8 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-hasPermi="['verify:benefit_apply:detail']"
           >
-            <router-link :to="'/verify/benefit_verify/verify_list/' + scope.row.tableId">
+            <router-link :to="'/verify/arear_list/verify_list/' + scope.row.tableId">
               <span>查看</span>
             </router-link>
           </el-button>
@@ -130,53 +140,16 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改审核历史对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="审核的申请表ID" prop="applyId">
-          <el-input v-model="form.applyId" placeholder="请输入审核的申请表ID" />
-        </el-form-item>
-        <el-form-item label="申请类型" prop="applyType">
-          <el-select v-model="form.applyType" placeholder="请选择申请类型">
-            <el-option
-              v-for="dict in dict.type.apply_type"
-              :key="dict.value"
-              :label="dict.label"
-              :value="parseInt(dict.value)"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="审核人员ID" prop="verifyPersonId">
-          <el-input v-model="form.verifyPersonId" placeholder="请输入审核人员ID" />
-        </el-form-item>
-        <el-form-item label="审核操作" prop="verifyAction">
-          <el-select v-model="form.verifyAction" placeholder="请选择审核操作">
-            <el-option
-              v-for="dict in dict.type.verify_action"
-              :key="dict.value"
-              :label="dict.label"
-              :value="parseInt(dict.value)"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="审核意见" prop="verifyAdvice">
-          <el-input v-model="form.verifyAdvice" placeholder="请输入审核意见" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getBenefitVerifyList, addBenefitVerifyByApplyIds } from "@/api/verify/benefit_list";
+import { getArearVerifyList } from "@/api/verify/arear_list";
 
 export default {
-  name: "Verify_history",
-  dicts: ['apply_type', 'sys_yes_no', 'verify_action', 'verify_unit', 'verify_state'],
+  name: "Arear_Verify",
+  dicts: ['apply_type', 'sys_yes_no', 'verify_action', 'verify_unit', 'verify_state', 'arrear_type',
+    'arrear_reason'],
   data() {
     return {
       // 遮罩层
@@ -192,7 +165,7 @@ export default {
       // 总条数
       total: 0,
       // 审核历史表格数据
-      benefit_applyList: [],
+      arear_applyList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -232,8 +205,8 @@ export default {
     /** 查询审核历史列表 */
     getList() {
       this.loading = true;
-      getBenefitVerifyList(this.queryParams).then(response => {
-        this.benefit_applyList = response.rows;
+      getArearVerifyList(this.queryParams).then(response => {
+        this.arear_applyList = response.rows;
         this.total = response.total;
         this.loading = false;
       });

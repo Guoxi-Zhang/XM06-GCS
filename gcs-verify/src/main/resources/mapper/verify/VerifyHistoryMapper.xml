@@ -11,13 +11,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="verifyPersonId"    column="verify_person_id"    />
         <result property="verifyAction"    column="verify_action"    />
         <result property="verifyAdvice"    column="verify_advice"    />
+        <result property="verifyUnit"    column="verify_unit"    />
         <result property="isDeleted"    column="is_deleted"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
     <sql id="selectVerifyHistoryVo">
-        select verify_id, apply_id, apply_type, verify_person_id, verify_action, verify_advice, is_deleted, create_time, update_time from verify_history
+        select verify_id, apply_id, apply_type, verify_person_id, verify_action, verify_advice, is_deleted, create_time, update_time, verify_unit from verify_history
     </sql>
 
     <select id="selectVerifyHistoryList" parameterType="VerifyHistory" resultMap="VerifyHistoryResult">
@@ -27,6 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyType != null "> and apply_type = #{applyType}</if>
             <if test="verifyPersonId != null "> and verify_person_id = #{verifyPersonId}</if>
             <if test="verifyAction != null "> and verify_action = #{verifyAction}</if>
+            <if test="verifyUnit != null "> and verify_unit = #{verifyUnit}</if>
             <if test="verifyAdvice != null  and verifyAdvice != ''"> and verify_advice = #{verifyAdvice}</if>
         </where>
     </select>
@@ -43,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyType != null">apply_type,</if>
             <if test="verifyPersonId != null">verify_person_id,</if>
             <if test="verifyAction != null">verify_action,</if>
+            <if test="verifyUnit != null">verify_unit,</if>
             <if test="verifyAdvice != null">verify_advice,</if>
             <if test="isDeleted != null">is_deleted,</if>
             <if test="createTime != null">create_time,</if>
@@ -53,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyType != null">#{applyType},</if>
             <if test="verifyPersonId != null">#{verifyPersonId},</if>
             <if test="verifyAction != null">#{verifyAction},</if>
+            <if test="verifyUnit != null">#{verifyUnit},</if>
             <if test="verifyAdvice != null">#{verifyAdvice},</if>
             <if test="isDeleted != null">#{isDeleted},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -67,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyType != null">apply_type = #{applyType},</if>
             <if test="verifyPersonId != null">verify_person_id = #{verifyPersonId},</if>
             <if test="verifyAction != null">verify_action = #{verifyAction},</if>
+            <if test="verifyUnit != null">verify_unit = #{verifyUnit},</if>
             <if test="verifyAdvice != null">verify_advice = #{verifyAdvice},</if>
             <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
