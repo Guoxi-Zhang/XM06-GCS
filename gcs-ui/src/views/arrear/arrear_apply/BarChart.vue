@@ -22,7 +22,7 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: '200px'
     },
 
   },
@@ -31,6 +31,10 @@ export default {
       chart: null,
       dept : [],
       num : [],
+      dicts: {
+        0: '家庭困难，已申请生源地助学贷款',
+        1: '家庭困难，准备申请国家助学贷款'
+      }
     }
   },
   // created(){
@@ -59,7 +63,7 @@ export default {
       this.number = [];
       getStatistics().then(response => {
         console.log(response);
-        this.reason = JSON.parse(JSON.stringify(response.reason));
+        this.reason = response.reason.map(value => this.dicts[value]);;
         this.number = JSON.parse(JSON.stringify(response.num));
         this.chart.setOption({
           tooltip: {

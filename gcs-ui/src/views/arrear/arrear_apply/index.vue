@@ -212,7 +212,7 @@
     />
 
     <!-- 图表对话框 -->
-    <el-dialog :title="title" :visible.sync="chart.open" width="600px" append-to-body>
+    <el-dialog :title="title" :visible.sync="chart.open" width="700px" append-to-body>
       <el-row style="width: 100%; font-weight: bold; top: 10px;" :gutter="10" :sm="24" :lg="24" type="flex">
         <el-col :xs="18" :sm="18">
           <div class="chart-wrapper">
@@ -224,7 +224,7 @@
     </el-dialog>
 
     <!-- 添加或修改欠缴费申请对话框，这里如果要分开添加/修改，看起来只能写两份不同的了 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="学生学号" prop="studentId">
           <el-input v-model="form.studentId" placeholder="请输入学生学号" />
