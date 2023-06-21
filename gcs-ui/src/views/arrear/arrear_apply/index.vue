@@ -267,7 +267,7 @@
               v-for="dict in dict.type.arrear_reason"
               :key="dict.value"
               :label="dict.label"
-              :value="dict.value"
+              :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -353,6 +353,9 @@ export default {
         ],
         arrearAmount: [
           { required: true, message: "缓缴金额不能为空", trigger: "blur" }
+        ],
+        arrearReason: [
+          { required: true, message: "欠费原因不能为空", trigger: "blur" }
         ],
       }
     };
