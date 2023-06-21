@@ -42,7 +42,10 @@ public class ProcessManagementServiceImpl implements IProcessManagementService
     {
         return processManagementMapper.selectProcessManagementList(processManagement);
     }
-
+    public List<ProcessManagement> selectProcessManagementRepeat(ProcessManagement processManagement)
+    {
+        return processManagementMapper.selectProcessManagementRepeat(processManagement);
+    }
     /**
      * 新增流程管理
      * 
