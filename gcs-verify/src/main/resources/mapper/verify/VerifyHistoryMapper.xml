@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectVerifyHistoryVo"/>
         where verify_id = #{verifyId}
     </select>
-        
+
     <insert id="insertVerifyHistory" parameterType="VerifyHistory" useGeneratedKeys="true" keyProperty="verifyId">
         insert into verify_history
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -90,4 +90,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{verifyId}
         </foreach>
     </delete>
+
+
+
+    <select id="selectAncestorsByUserId" resultType="java.util.Map">
+        select sd1.dept_name fa, sd2.dept_name fafa
+        from sys_user su
+            left outer join sys_dept sd1 on su.dept_id = sd1.dept_id
+            left outer join sys_dept sd2 on sd1.parent_id = sd2.dept_id
+        where su.user_id = #{userId}
+    </select>
 </mapper>

@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface BenefitVerifyMapper {
+
+    
+
     List<BenefitVerify> selectBenefitVerifyList(BenefitVerify benefitVerify);
 
     BenefitVerify selectVerifyListByApplyId(Long applyId);
@@ -15,4 +18,5 @@ public interface BenefitVerifyMapper {
 
     void setApplyState(@Param("applyId") Long applyId,
                        @Param("nextStage") Long nextStage, @Param("nextState")Long nextState);
+
 }

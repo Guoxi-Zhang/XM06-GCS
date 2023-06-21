@@ -45,10 +45,10 @@
                 and student_id = #{studentId}
             </if>
             <if test="grade != null">
-                and sd1.dept_name = #{grade}
+                and sd1.dept_name = '${grade}'
             </if>
             <if test="school != null">
-                and sd2.dept_name like '%${school}%'
+                and sd2.dept_name = '${school}'
             </if>
         </where>
     </select>
@@ -69,6 +69,7 @@
            ba.table_id = #{applyId}
         </where>
     </select>
+
 
     <update id="modifyBenefitApply" parameterType="BenefitVerify">
         update benefit_apply

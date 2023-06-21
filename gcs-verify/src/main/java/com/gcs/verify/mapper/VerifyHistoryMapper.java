@@ -1,7 +1,11 @@
 package com.gcs.verify.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.gcs.verify.domain.VerifyHistory;
+import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 审核历史Mapper接口
@@ -58,4 +62,7 @@ public interface VerifyHistoryMapper
      * @return 结果
      */
     public int deleteVerifyHistoryByVerifyIds(Long[] verifyIds);
+
+
+    Map<String, String> selectAncestorsByUserId(@Param("userId") Long userId);
 }

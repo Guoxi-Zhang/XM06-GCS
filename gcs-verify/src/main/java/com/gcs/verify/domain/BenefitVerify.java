@@ -11,7 +11,7 @@ public class BenefitVerify {
 
     /** 学生学号 */
     @Excel(name = "学生学号")
-    private String studentId;
+    private Long studentId;
 
     /** 生活补助 */
     @Excel(name = "生活补助")
@@ -53,11 +53,11 @@ public class BenefitVerify {
         this.tableId = tableId;
     }
 
-    public String getStudentId() {
+    public Long getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(String studentId) {
+    public void setStudentId(Long studentId) {
         this.studentId = studentId;
     }
 

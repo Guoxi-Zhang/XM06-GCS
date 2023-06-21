@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -28,6 +29,19 @@ public class ArearVerifyServiceImpl implements IArearVerifyService {
 
     @Override
     public List<ArearVerify> selectArearVerifyList(ArearVerify arearVerify) {
+        Long userId = SecurityUtils.getUserId();
+        Long verifyUnit = Long.valueOf(getVerifyUnit(userId));
+        Map<String, String> ancestors = verifyHistoryMapper.selectAncestorsByUserId(userId);
+
+        if (verifyUnit.equals(0L)) {
+            arearVerify.setSchool(ancestors.get("fafa"));
+            arearVerify.setGrade(ancestors.get("fa"));
+        } else if (verifyUnit.equals(1L)) {
+            arearVerify.setSchool(ancestors.get("fa"));
+        } else if (verifyUnit.equals(3L)) {
+            arearVerify.setStudentId(userId);
+        }
+
         return arearVerifyMapper.selectArearVerifyList(arearVerify);
     }
 

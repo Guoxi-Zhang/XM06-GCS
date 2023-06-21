@@ -41,6 +41,19 @@ public class BenefitVerifyServiceImpl implements IBenefitVerifyService {
 
     @Override
     public List<BenefitVerify> selectBenefitVerifyList(BenefitVerify benefitVerify) {
+
+        Long userId = SecurityUtils.getUserId();
+        Long verifyUnit = Long.valueOf(getVerifyUnit(userId));
+        Map<String, String> ancestors = verifyHistoryMapper.selectAncestorsByUserId(userId);
+
+        if (verifyUnit.equals(0L)) {
+            benefitVerify.setSchool(ancestors.get("fafa"));
+            benefitVerify.setGrade(ancestors.get("fa"));
+        } else if (verifyUnit.equals(1L)) {
+            benefitVerify.setSchool(ancestors.get("fa"));
+        } else if (verifyUnit.equals(3L)) {
+            benefitVerify.setStudentId(userId);
+        }
         return benefitVerifyMapper.selectBenefitVerifyList(benefitVerify);
     }
 
@@ -108,6 +121,8 @@ public class BenefitVerifyServiceImpl implements IBenefitVerifyService {
             return Long.valueOf(1);
         } else if ("university".equals(roleName)){
             return Long.valueOf(2);
+        } else if ("student".equals(roleName)){
+            return Long.valueOf(3);
         } else {
             return Long.valueOf(-1);
         }
