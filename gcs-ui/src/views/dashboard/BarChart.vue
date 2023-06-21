@@ -6,7 +6,7 @@
 import * as echarts from 'echarts';
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
-
+// import {getStatistics} from "@/api/system/user"
 const animationDuration = 6000
 
 export default {

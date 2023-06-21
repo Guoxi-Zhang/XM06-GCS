@@ -130,6 +130,18 @@
           v-hasPermi="['arrear:arrear_apply:export']"
         >导出</el-button>
       </el-col>
+
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-news"
+          size="mini"
+          @click="handleStatistics"
+          v-hasPermi="['system:user:export']"
+        >统计</el-button>
+      </el-col>
+
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -199,8 +211,20 @@
       @pagination="getList"
     />
 
+    <!-- 图表对话框 -->
+    <el-dialog :title="title" :visible.sync="chart.open" width="700px" append-to-body>
+      <el-row style="width: 100%; font-weight: bold; top: 10px;" :gutter="10" :sm="24" :lg="24" type="flex">
+        <el-col :xs="18" :sm="18">
+          <div class="chart-wrapper">
+            <bar-chart />
+          </div>
+        </el-col>
+        <el-col :xs="6" :sm="6"></el-col>
+      </el-row>
+    </el-dialog>
+
     <!-- 添加或修改欠缴费申请对话框，这里如果要分开添加/修改，看起来只能写两份不同的了 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="学生学号" prop="studentId">
           <el-input v-model="form.studentId" placeholder="请输入学生学号" />
@@ -261,12 +285,20 @@
 
 <script>
 import { listArrear_apply, getArrear_apply, delArrear_apply, addArrear_apply, updateArrear_apply } from "@/api/arrear/arrear_apply";
-
+import BarChart from './BarChart';
+import Treeselect from "@riophae/vue-treeselect";
 export default {
   name: "Arrear_apply",
   dicts: ['verify_unit', 'verify_state', 'arrear_type', 'applicant_type', 'arrear_reason'],
+  components: { BarChart},
   data() {
     return {
+
+      chart:{
+        open:false,
+        title:"欠费原因人数统计图表",
+      },
+
       // 遮罩层
       loading: true,
       // 选中数组
@@ -329,17 +361,10 @@ export default {
     this.getList();
   },
   methods: {
+    // 统计按钮
+    handleStatistics(){
+      this.chart.open = true;
 
-    checkExistingApplication(studentId, batchId, arrearId) {
-      // 调用后端API来查询数据库中是否存在符合条件的记录
-      return checkExistingApplicationAPI(studentId, batchId, arrearId)
-        .then(response => {
-          return response.data;
-        })
-        .catch(error => {
-          console.error(error);
-          return false;
-        });
     },
     /** 查询欠缴费申请列表 */
     getList() {

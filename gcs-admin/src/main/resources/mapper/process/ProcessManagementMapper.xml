@@ -34,6 +34,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectProcessManagementVo"/>
         where id = #{id}
     </select>
+
+    <select id="selectProcessManagementRepeat" parameterType="ProcessManagement" resultMap="ProcessManagementResult">
+        <include refid="selectProcessManagementVo"/>
+        <where>
+            <if test="batch != null "> and batch = #{batch}</if>
+        </where>
+    </select>
         
     <insert id="insertProcessManagement" parameterType="ProcessManagement" useGeneratedKeys="true" keyProperty="id">
         insert into process_management

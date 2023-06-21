@@ -1,8 +1,15 @@
 package com.gcs.web.controller.system;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson2.JSONObject;
+import com.gcs.common.annotation.Anonymous;
+import com.gcs.framework.web.domain.server.Sys;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +44,7 @@ import com.gcs.system.service.ISysUserService;
  * 
  * @author ruoyi
  */
+
 @RestController
 @RequestMapping("/system/user")
 public class SysUserController extends BaseController
@@ -56,13 +64,41 @@ public class SysUserController extends BaseController
     /**
      * 获取用户列表
      */
-    @PreAuthorize("@ss.hasPermi('system:user:list')")
+//    @PreAuthorize("@ss.hasPermi('system:user:list')")
+    @Anonymous
     @GetMapping("/list")
     public TableDataInfo list(SysUser user)
     {
         startPage();
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
+    }
+
+
+    @GetMapping("/chart")
+    public AjaxResult chartData(SysUser user)
+    {
+        AjaxResult ajax = AjaxResult.success();
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        List<SysUser> list = userService.selectUserList(user);
+        for(SysUser s : list){
+            String deptName = s.getDept().getDeptName();
+            if(map.containsKey(deptName)){
+                int num = map.get(deptName);
+                map.replace(deptName, num+1);
+            }else{
+                map.put(deptName, 1);
+            }
+        }
+        List<String> dept = new ArrayList<>();
+        List<Integer> num = new ArrayList<>();
+        for(Map.Entry<String, Integer> entry : map.entrySet()){
+            dept.add(entry.getKey());
+            num.add(entry.getValue());
+        }
+        ajax.put("dept",dept);
+        ajax.put("num",num);
+        return ajax;
     }
 
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
