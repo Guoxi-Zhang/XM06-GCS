@@ -77,7 +77,19 @@ public class ProcessManagementController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody ProcessManagement processManagement)
     {
+        List<ProcessManagement> list = processManagementService.selectProcessManagementRepeat(processManagement);
+        Long batch = processManagement.getBatch();
+        System.out.println(batch);
+        int i=0;
+        for(ProcessManagement x:list){
+            System.out.println(i + " :" + x.toString());
+            if(x.getBatch()==batch){
+
+                return AjaxResult.error("已经存在相同批次！操作失败！");
+            }
+        }
         return toAjax(processManagementService.insertProcessManagement(processManagement));
+
     }
 
     /**

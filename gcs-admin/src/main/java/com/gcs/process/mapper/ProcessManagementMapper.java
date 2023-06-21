@@ -26,7 +26,7 @@ public interface ProcessManagementMapper
      * @return 流程管理集合
      */
     public List<ProcessManagement> selectProcessManagementList(ProcessManagement processManagement);
-
+    public List<ProcessManagement> selectProcessManagementRepeat(ProcessManagement processManagement);
     /**
      * 新增流程管理
      * 
