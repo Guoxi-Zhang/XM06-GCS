@@ -45,4 +45,3 @@ nbdist/
 !*/build/*.java
 !*/build/*.html
 !*/build/*.xml
-gcs-ui/package.json

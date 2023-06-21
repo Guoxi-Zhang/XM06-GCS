@@ -4,9 +4,9 @@
 
 <script>
 import * as echarts from 'echarts';
-require('echarts/theme/macarons') // echarts theme
-import resize from './mixins/resize'
-// import {getStatistics} from "@/api/system/user"
+require('echarts/theme/macarons')// echarts theme
+import resize from '@/views/dashboard/mixins/resize'
+import {getStatistics} from "@/api/arrear/arrear_apply"
 const animationDuration = 6000
 
 export default {
@@ -23,18 +23,28 @@ export default {
     height: {
       type: String,
       default: '300px'
-    }
+    },
+
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      dept : [],
+      num : [],
     }
+  },
+  created(){
+    this.$nextTick(() => {
+      this.initChart()
+    })
   },
   mounted() {
     this.$nextTick(() => {
       this.initChart()
     })
   },
+
+
   beforeDestroy() {
     if (!this.chart) {
       return
@@ -42,11 +52,25 @@ export default {
     this.chart.dispose()
     this.chart = null
   },
+
   methods: {
+
     initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
+
+      this.chart = echarts.init(this.$el, 'macarons');
+      this.reason = [];
+      this.number = [];
+      getStatistics().then(response => {
+        console.log(response);
+        this.reason = JSON.parse(JSON.stringify(response.reason));
+        this.number = JSON.parse(JSON.stringify(response.num));
+
+        console.log(this.reason);
+        console.log(this.number);
+      });
 
       this.chart.setOption({
+
         tooltip: {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -62,7 +86,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: this.reason,
           axisTick: {
             alignWithLabel: true
           }
@@ -74,28 +98,15 @@ export default {
           }
         }],
         series: [{
-          name: 'pageA',
+          name: '人数',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageB',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageC',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }]
+          data: this.number,
+          // animationDuration
+        }],
       })
+
     }
   }
 }

@@ -9,6 +9,14 @@ export function listArrear_apply(query) {
   })
 }
 
+// 统计信息
+export function getStatistics() {
+  return request({
+    url: '/arrear/arrear_apply/chart',
+    method: 'get'
+  })
+}
+
 // 查询欠缴费申请详细
 export function getArrear_apply(tableId) {
   return request({

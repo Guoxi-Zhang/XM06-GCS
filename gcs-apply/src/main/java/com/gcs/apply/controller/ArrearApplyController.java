@@ -1,7 +1,12 @@
 package com.gcs.apply.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
+
+import com.gcs.common.core.domain.entity.SysUser;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +32,7 @@ public class ArrearApplyController extends BaseController
     @Autowired
     private IArrearApplyService arrearApplyService;
 
+
     /**
      * 查询欠缴费申请列表
      */
@@ -44,6 +50,35 @@ public class ArrearApplyController extends BaseController
 //        List<ArrearApply> list = arrearApplyService.selectArrearApplyList(arrearApply);
 //        return getDataTable(list);
 //    }
+
+    @GetMapping("/chart")
+    public AjaxResult chartData(ArrearApply arrearApply)
+    {
+        AjaxResult ajax = AjaxResult.success();
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        List<ArrearApply> list = arrearApplyService.selectArrearApplyListWithInfo(arrearApply);
+        for(ArrearApply a : list){
+            String reason = a.getArrearReason();
+            if(map.containsKey(reason)){
+                int num = map.get(reason);
+                map.replace(reason, num+1);
+            }else{
+                map.put(reason, 1);
+            }
+        }
+
+        List<String> reason = new ArrayList<>();
+        List<Integer> num = new ArrayList<>();
+        for(Map.Entry<String, Integer> entry : map.entrySet()){
+            reason.add(entry.getKey());
+            num.add(entry.getValue());
+        }
+        ajax.put("num",num);
+        ajax.put("reason",reason);
+
+        return ajax;
+    }
+
 
     /**
      * 导出欠缴费申请列表

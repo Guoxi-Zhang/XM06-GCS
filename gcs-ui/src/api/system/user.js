@@ -18,6 +18,14 @@ export function getUser(userId) {
   })
 }
 
+// 统计信息
+export function getStatistics() {
+  return request({
+    url: '/system/user/chart',
+    method: 'get'
+  })
+}
+
 // 新增用户
 export function addUser(data) {
   return request({

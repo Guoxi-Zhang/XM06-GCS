@@ -133,12 +133,22 @@
               v-hasPermi="['system:user:export']"
             >导出</el-button>
           </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-news"
+              size="mini"
+              @click="handleStatistics"
+              v-hasPermi="['system:user:export']"
+            >统计</el-button>
+          </el-col>
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
         </el-row>
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="用户编号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
+          <el-table-column label="学号/工号" align="center" key="userId" prop="userId" v-if="columns[0].visible" />
           <el-table-column label="用户名称" align="center" key="userName" prop="userName" v-if="columns[1].visible" :show-overflow-tooltip="true" />
           <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
           <el-table-column label="部门" align="center" key="deptName" prop="dept.deptName" v-if="columns[3].visible" :show-overflow-tooltip="true" />
@@ -308,6 +318,19 @@
       </div>
     </el-dialog>
 
+    <!-- 图表对话框 -->
+    <el-dialog :title="title" :visible.sync="chart.open" width="600px" append-to-body>
+      <el-row style="width: 100%; font-weight: bold; top: 10px;" :gutter="10" :sm="24" :lg="24" type="flex">
+        <el-col :xs="18" :sm="18">
+          <div class="chart-wrapper">
+            <bar-chart />
+          </div>
+        </el-col>
+        <el-col :xs="6" :sm="6"></el-col>
+      </el-row>
+    </el-dialog>
+
+
     <!-- 用户导入对话框 -->
     <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
       <el-upload
@@ -345,11 +368,13 @@ import { listUser, getUser, delUser, addUser, updateUser, resetUserPwd, changeUs
 import { getToken } from "@/utils/auth";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import BarChart from './BarChart';
+// import BarChart from '@/views/dashboard/BarChart';
 
 export default {
   name: "User",
   dicts: ['sys_normal_disable', 'sys_user_sex'],
-  components: { Treeselect },
+  components: { Treeselect, BarChart},
   data() {
     return {
       // 遮罩层
@@ -388,6 +413,10 @@ export default {
         children: "children",
         label: "label"
       },
+      chart:{
+        open:false,
+        title:"人数统计图表",
+      },
       // 用户导入参数
       upload: {
         // 是否显示弹出层（用户导入）
@@ -414,7 +443,7 @@ export default {
       },
       // 列信息
       columns: [
-        { key: 0, label: `用户编号`, visible: true },
+        { key: 0, label: `学号/工号`, visible: true },
         { key: 1, label: `用户名称`, visible: true },
         { key: 2, label: `用户昵称`, visible: true },
         { key: 3, label: `部门`, visible: true },
@@ -626,7 +655,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const userIds = row.userId || this.ids;
-      this.$modal.confirm('是否确认删除用户编号为"' + userIds + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除学号/工号为"' + userIds + '"的数据项？').then(function() {
         return delUser(userIds);
       }).then(() => {
         this.getList();
@@ -644,6 +673,13 @@ export default {
       this.upload.title = "用户导入";
       this.upload.open = true;
     },
+
+    // 统计按钮
+    handleStatistics(){
+      this.chart.open = true;
+
+    },
+
     /** 下载模板操作 */
     importTemplate() {
       this.download('system/user/importTemplate', {
