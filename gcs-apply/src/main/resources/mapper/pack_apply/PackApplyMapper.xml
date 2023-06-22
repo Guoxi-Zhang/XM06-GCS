@@ -9,8 +9,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="studentId"    column="student_id"    />
         <result property="operatorId"    column="operator_id"    />
         <result property="operatorType"    column="operator_type"    />
+        <result property="packId"    column="pack_id"    />
         <result property="applyReason"    column="apply_reason"    />
-        <result property="batchId"    column="batch_id"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="isDeleted"    column="is_deleted"    />
@@ -18,59 +18,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="applyState"    column="apply_state"    />
     </resultMap>
 
-    <resultMap id="PackApplyPackListResult" type="PackApply" extends="PackApplyResult">
-        <collection property="packListList" notNullColumn="sub_choose_id" javaType="java.util.List" resultMap="PackListResult" />
-    </resultMap>
-
-    <resultMap type="PackList" id="PackListResult">
-        <result property="chooseId"    column="sub_choose_id"    />
-        <result property="giftId"    column="sub_gift_id"    />
-        <result property="tableId"    column="sub_table_id"    />
-        <result property="giftNum"    column="sub_gift_num"    />
-    </resultMap>
-
     <sql id="selectPackApplyVo">
-        select table_id, student_id, operator_id, operator_type, apply_reason, batch_id, create_time, update_time, is_deleted, now_step, apply_state from pack_apply
+        select table_id, student_id, operator_id, operator_type, pack_id, apply_reason, create_time, update_time, is_deleted, now_step, apply_state from pack_apply
     </sql>
 
     <select id="selectPackApplyList" parameterType="PackApply" resultMap="PackApplyResult">
         <include refid="selectPackApplyVo"/>
         <where>  
-            <if test="tableId != null "> and table_id = #{tableId}</if>
-            <if test="studentId != null  and studentId != ''"> and student_id like concat('%', #{studentId}, '%')</if>
-            <if test="operatorId != null  and operatorId != ''"> and operator_id like concat('%', #{operatorId}, '%')</if>
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="operatorId != null "> and operator_id = #{operatorId}</if>
             <if test="operatorType != null "> and operator_type = #{operatorType}</if>
+            <if test="packId != null "> and pack_id = #{packId}</if>
             <if test="applyReason != null  and applyReason != ''"> and apply_reason = #{applyReason}</if>
-            <if test="batchId != null "> and batch_id = #{batchId}</if>
             <if test="nowStep != null "> and now_step = #{nowStep}</if>
             <if test="applyState != null "> and apply_state = #{applyState}</if>
         </where>
     </select>
     
-    <select id="selectPackApplyByTableId" parameterType="Long" resultMap="PackApplyPackListResult">
-        select a.table_id, a.student_id, a.operator_id, a.operator_type, a.apply_reason, a.batch_id, a.create_time, a.update_time, a.is_deleted, a.now_step, a.apply_state,
- b.choose_id as sub_choose_id, b.gift_id as sub_gift_id, b.table_id as sub_table_id, b.gift_num as sub_gift_num
-        from pack_apply a
-        left join pack_list b on b.table_id = a.table_id
-        where a.table_id = #{tableId}
-    </select>
-
-    <select id="selectPatchSumByGiftId" parameterType="Long" resultMap="PackApplyPackListResult">
-        select a.gift_inventory
-        from pack_apply a
-        left join pack_list b on b.table_id = a.table_id
-        left join pack_info c on c.gift_id = b.gift_id
-        where a.table_id = #{tableId}
+    <select id="selectPackApplyByTableId" parameterType="Long" resultMap="PackApplyResult">
+        <include refid="selectPackApplyVo"/>
+        where table_id = #{tableId}
     </select>
         
     <insert id="insertPackApply" parameterType="PackApply" useGeneratedKeys="true" keyProperty="tableId">
         insert into pack_apply
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="studentId != null and studentId != ''">student_id,</if>
-            <if test="operatorId != null and operatorId != ''">operator_id,</if>
+            <if test="studentId != null">student_id,</if>
+            <if test="operatorId != null">operator_id,</if>
             <if test="operatorType != null">operator_type,</if>
+            <if test="packId != null">pack_id,</if>
             <if test="applyReason != null">apply_reason,</if>
-            <if test="batchId != null">batch_id,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="isDeleted != null">is_deleted,</if>
@@ -78,11 +55,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyState != null">apply_state,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="studentId != null and studentId != ''">#{studentId},</if>
-            <if test="operatorId != null and operatorId != ''">#{operatorId},</if>
+            <if test="studentId != null">#{studentId},</if>
+            <if test="operatorId != null">#{operatorId},</if>
             <if test="operatorType != null">#{operatorType},</if>
+            <if test="packId != null">#{packId},</if>
             <if test="applyReason != null">#{applyReason},</if>
-            <if test="batchId != null">#{batchId},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="isDeleted != null">#{isDeleted},</if>
@@ -94,11 +71,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updatePackApply" parameterType="PackApply">
         update pack_apply
         <trim prefix="SET" suffixOverrides=",">
-            <if test="studentId != null and studentId != ''">student_id = #{studentId},</if>
-            <if test="operatorId != null and operatorId != ''">operator_id = #{operatorId},</if>
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="operatorId != null">operator_id = #{operatorId},</if>
             <if test="operatorType != null">operator_type = #{operatorType},</if>
+            <if test="packId != null">pack_id = #{packId},</if>
             <if test="applyReason != null">apply_reason = #{applyReason},</if>
-            <if test="batchId != null">batch_id = #{batchId},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
@@ -118,22 +95,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{tableId}
         </foreach>
     </delete>
-    
-    <delete id="deletePackListByTableIds" parameterType="String">
-        delete from pack_list where table_id in 
-        <foreach item="tableId" collection="array" open="(" separator="," close=")">
-            #{tableId}
-        </foreach>
-    </delete>
-
-    <delete id="deletePackListByTableId" parameterType="Long">
-        delete from pack_list where table_id = #{tableId}
-    </delete>
-
-    <insert id="batchPackList">
-        insert into pack_list( choose_id, gift_id, table_id, gift_num) values
-        <foreach item="item" index="index" collection="list" separator=",">
-            ( #{item.chooseId}, #{item.giftId}, #{item.tableId}, #{item.giftNum})
-        </foreach>
-    </insert>
 </mapper>

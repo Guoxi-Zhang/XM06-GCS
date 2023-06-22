@@ -22,10 +22,10 @@ import com.gcs.common.utils.poi.ExcelUtil;
 import com.gcs.common.core.page.TableDataInfo;
 
 /**
- * 大礼包申请Controller
+ * 爱心大礼包申请Controller
  * 
  * @author xm06-gcs
- * @date 2023-06-20
+ * @date 2023-06-22
  */
 @RestController
 @RequestMapping("/pack_apply/pack_apply")
@@ -35,7 +35,7 @@ public class PackApplyController extends BaseController
     private IPackApplyService packApplyService;
 
     /**
-     * 查询大礼包申请列表
+     * 查询爱心大礼包申请列表
      */
     @PreAuthorize("@ss.hasPermi('pack_apply:pack_apply:list')")
     @GetMapping("/list")
@@ -47,20 +47,20 @@ public class PackApplyController extends BaseController
     }
 
     /**
-     * 导出大礼包申请列表
+     * 导出爱心大礼包申请列表
      */
     @PreAuthorize("@ss.hasPermi('pack_apply:pack_apply:export')")
-    @Log(title = "大礼包申请", businessType = BusinessType.EXPORT)
+    @Log(title = "爱心大礼包申请", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, PackApply packApply)
     {
         List<PackApply> list = packApplyService.selectPackApplyList(packApply);
         ExcelUtil<PackApply> util = new ExcelUtil<PackApply>(PackApply.class);
-        util.exportExcel(response, list, "大礼包申请数据");
+        util.exportExcel(response, list, "爱心大礼包申请数据");
     }
 
     /**
-     * 获取大礼包申请详细信息
+     * 获取爱心大礼包申请详细信息
      */
     @PreAuthorize("@ss.hasPermi('pack_apply:pack_apply:query')")
     @GetMapping(value = "/{tableId}")
@@ -70,10 +70,10 @@ public class PackApplyController extends BaseController
     }
 
     /**
-     * 新增大礼包申请
+     * 新增爱心大礼包申请
      */
     @PreAuthorize("@ss.hasPermi('pack_apply:pack_apply:add')")
-    @Log(title = "大礼包申请", businessType = BusinessType.INSERT)
+    @Log(title = "爱心大礼包申请", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody PackApply packApply)
     {
@@ -81,10 +81,10 @@ public class PackApplyController extends BaseController
     }
 
     /**
-     * 修改大礼包申请
+     * 修改爱心大礼包申请
      */
     @PreAuthorize("@ss.hasPermi('pack_apply:pack_apply:edit')")
-    @Log(title = "大礼包申请", businessType = BusinessType.UPDATE)
+    @Log(title = "爱心大礼包申请", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody PackApply packApply)
     {
@@ -92,10 +92,10 @@ public class PackApplyController extends BaseController
     }
 
     /**
-     * 删除大礼包申请
+     * 删除爱心大礼包申请
      */
     @PreAuthorize("@ss.hasPermi('pack_apply:pack_apply:remove')")
-    @Log(title = "大礼包申请", businessType = BusinessType.DELETE)
+    @Log(title = "爱心大礼包申请", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{tableIds}")
     public AjaxResult remove(@PathVariable Long[] tableIds)
     {

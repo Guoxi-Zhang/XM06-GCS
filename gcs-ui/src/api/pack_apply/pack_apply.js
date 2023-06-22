@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询大礼包申请列表
+// 查询爱心大礼包申请列表
 export function listPack_apply(query) {
   return request({
     url: '/pack_apply/pack_apply/list',
@@ -9,7 +9,7 @@ export function listPack_apply(query) {
   })
 }
 
-// 查询大礼包申请详细
+// 查询爱心大礼包申请详细
 export function getPack_apply(tableId) {
   return request({
     url: '/pack_apply/pack_apply/' + tableId,
@@ -17,7 +17,7 @@ export function getPack_apply(tableId) {
   })
 }
 
-// 新增大礼包申请
+// 新增爱心大礼包申请
 export function addPack_apply(data) {
   return request({
     url: '/pack_apply/pack_apply',
@@ -26,7 +26,7 @@ export function addPack_apply(data) {
   })
 }
 
-// 修改大礼包申请
+// 修改爱心大礼包申请
 export function updatePack_apply(data) {
   return request({
     url: '/pack_apply/pack_apply',
@@ -35,7 +35,7 @@ export function updatePack_apply(data) {
   })
 }
 
-// 删除大礼包申请
+// 删除爱心大礼包申请
 export function delPack_apply(tableId) {
   return request({
     url: '/pack_apply/pack_apply/' + tableId,
