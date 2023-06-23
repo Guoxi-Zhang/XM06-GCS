@@ -1,6 +1,8 @@
 package com.gcs.apply.service;
 
 import java.util.List;
+
+import com.gcs.apply.domain.ArrearApply;
 import com.gcs.apply.domain.BenefitApply;
 
 /**
@@ -26,6 +28,7 @@ public interface IBenefitApplyService
      * @return 补助申请集合
      */
     public List<BenefitApply> selectBenefitApplyList(BenefitApply benefitApply);
+    public List<BenefitApply> selectBenefitApplyWithRepeat(BenefitApply benefitApply);
 
     /**
      * 新增补助申请

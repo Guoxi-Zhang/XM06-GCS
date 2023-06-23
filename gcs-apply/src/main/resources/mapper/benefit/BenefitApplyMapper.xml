@@ -44,6 +44,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where table_id = #{tableId}
     </select>
 
+    <select id="selectBenefitApplyWithRepeat" parameterType="BenefitApply" resultMap="BenefitApplyResult">
+        <include refid="selectBenefitApplyVo"/>
+        <where> 1=1
+            <if test="studentId != null  and studentId != ''"> and user_id = #{studentId}</if>
+            <if test="batchId != null "> and batch_id = #{batchId}</if>
+        </where>
+        ${params.dataScope}
+    </select>
+
     <insert id="insertBenefitApply" parameterType="BenefitApply" useGeneratedKeys="true" keyProperty="tableId">
         insert into benefit_apply
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -26,6 +26,7 @@ public interface PackApplyMapper
      * @return 爱心大礼包申请集合
      */
     public List<PackApply> selectPackApplyList(PackApply packApply);
+    public List<PackApply> selectPackApplyWithRepeat(PackApply packApply);
 
     /**
      * 新增爱心大礼包申请

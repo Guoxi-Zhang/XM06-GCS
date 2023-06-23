@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gcs.apply.domain.BenefitApply;
 import com.gcs.common.core.domain.entity.SysUser;
 import com.gcs.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -95,6 +96,15 @@ public class PackApplyController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody PackApply packApply)
     {
+        List<PackApply> list = packApplyService.selectPackApplyWithRepeat(packApply);
+        Long studentId = packApply.getStudentId();    //学号
+        Long packId = packApply.getPackId();        //礼包
+        int i = 0;
+        for(PackApply x: list){
+            if(x.getStudentId() == studentId && x.getPackId() == packId){
+                return AjaxResult.error("已经存在相同项目！操作失败！");    // 返回error
+            }
+        }
         return toAjax(packApplyService.insertPackApply(packApply));
     }
 

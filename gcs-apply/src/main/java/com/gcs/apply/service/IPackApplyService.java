@@ -1,6 +1,8 @@
 package com.gcs.apply.service;
 
 import java.util.List;
+
+import com.gcs.apply.domain.BenefitApply;
 import com.gcs.apply.domain.PackApply;
 
 /**
@@ -26,6 +28,7 @@ public interface IPackApplyService
      * @return 爱心大礼包申请集合
      */
     public List<PackApply> selectPackApplyList(PackApply packApply);
+    public List<PackApply> selectPackApplyWithRepeat(PackApply packApply);
 
     /**
      * 新增爱心大礼包申请

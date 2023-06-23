@@ -2,6 +2,7 @@ package com.gcs.apply.service.impl;
 
 import java.util.List;
 
+import com.gcs.apply.domain.BenefitApply;
 import com.gcs.common.annotation.DataScope;
 import com.gcs.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,12 @@ public class PackApplyServiceImpl implements IPackApplyService
     public List<PackApply> selectPackApplyList(PackApply packApply)
     {
         return packApplyMapper.selectPackApplyList(packApply);
+    }
+    @Override
+    @DataScope(deptAlias = "pack_apply", userAlias = "pack_apply")
+    public List<PackApply> selectPackApplyWithRepeat(PackApply packApply)
+    {
+        return packApplyMapper.selectPackApplyWithRepeat(packApply);
     }
 
     /**

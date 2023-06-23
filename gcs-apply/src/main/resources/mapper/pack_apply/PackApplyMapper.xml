@@ -35,7 +35,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         ${params.dataScope}
     </select>
-    
+
+    <select id="selectPackApplyWithRepeat" parameterType="PackApply" resultMap="PackApplyResult">
+        <include refid="selectPackApplyVo"/>
+        <where> 1=1
+            <if test="studentId != null  and studentId != ''"> and user_id = #{studentId}</if>
+            <if test="packId != null "> and pack_id = #{packId}</if>
+        </where>
+        ${params.dataScope}
+    </select>
+
     <select id="selectPackApplyByTableId" parameterType="Long" resultMap="PackApplyResult">
         <include refid="selectPackApplyVo"/>
         where table_id = #{tableId}

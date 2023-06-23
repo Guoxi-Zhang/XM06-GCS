@@ -2,6 +2,7 @@ package com.gcs.apply.service.impl;
 
 import java.util.List;
 
+import com.gcs.apply.domain.ArrearApply;
 import com.gcs.common.annotation.DataScope;
 import com.gcs.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,13 @@ public class BenefitApplyServiceImpl implements IBenefitApplyService
     {
         return benefitApplyMapper.selectBenefitApplyList(benefitApply);
     }
+    @Override
+    @DataScope(deptAlias = "benefit_apply", userAlias = "benefit_apply")
+    public List<BenefitApply> selectBenefitApplyWithRepeat(BenefitApply benefitApply)
+    {
+        return benefitApplyMapper.selectBenefitApplyWithRepeat(benefitApply);
+    }
+
 
     /**
      * 新增补助申请

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gcs.apply.domain.ArrearApply;
 import com.gcs.common.core.domain.entity.SysUser;
 import com.gcs.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -95,6 +96,16 @@ public class BenefitApplyController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody BenefitApply benefitApply)
     {
+        List<BenefitApply> list = benefitApplyService.selectBenefitApplyWithRepeat(benefitApply);
+        Long studentId = benefitApply.getStudentId();    //学号
+        Long batchId = benefitApply.getBatchId();        //批次
+        int i = 0;
+        for(BenefitApply x: list){
+            System.out.println(i + " :" + x.toString());
+            if(x.getStudentId().equals(studentId) && x.getBatchId() == batchId){
+                return AjaxResult.error("已经存在相同项目！操作失败！");    // 返回error
+            }
+        }
         return toAjax(benefitApplyService.insertBenefitApply(benefitApply));
     }
 
