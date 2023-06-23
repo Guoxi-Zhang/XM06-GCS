@@ -6,7 +6,7 @@
 import * as echarts from 'echarts';
 require('echarts/theme/macarons')// echarts theme
 import resize from '@/views/dashboard/mixins/resize'
-import {getStatistics} from "@/api/arrear/arrear_apply"
+import {getStatistics} from "@/api/verify/verify_history"
 const animationDuration = 6000
 
 export default {
@@ -29,11 +29,11 @@ export default {
   data() {
     return {
       chart: null,
-      dept : [],
-      num : [],
+
       dicts: {
-        0: '已申请生源地助学贷款',
-        1: '准备申请国家助学贷款'
+        0: '绿色通道',
+        1: '爱心大礼包',
+        2: '补助申请'
       }
     }
   },
@@ -59,14 +59,14 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons');
-      this.reason = [];
-      this.number = [];
-      this.amount = [];
+      this.type = [];
+      this.totalNum = [];
+      this.passedNum = [];
       getStatistics().then(response => {
         console.log(response);
-        this.reason = response.reason.map(value => this.dicts[value]);
-        this.number = JSON.parse(JSON.stringify(response.num));
-        this.amount = JSON.parse(JSON.stringify(response.amount));
+        this.type = response.type.map(value => this.dicts[value]);
+        this.totalNum = JSON.parse(JSON.stringify(response.totalNum));
+        this.passedNum = JSON.parse(JSON.stringify(response.passedNum));
         this.chart.setOption({
           tooltip: {
             trigger: 'axis',
@@ -83,7 +83,7 @@ export default {
           },
           xAxis: [{
             type: 'category',
-            data: this.reason,
+            data: this.type,
             axisTick: {
               alignWithLabel: true
             }
@@ -95,19 +95,19 @@ export default {
             }
           }],
           series: [{
-            name: '申请人数',
+            name: '该类型总数',
             type: 'bar',
             stack: 'vistors',
             barWidth: '60%',
-            data: this.number,
+            data: this.totalNum,
             // animationDuration
           },
           {
-            name: '申请总金额/10^3',
+            name: '通过数',
             type: 'bar',
             stack: 'vistors',
             barWidth: '60%',
-            data: this.amount,
+            data: this.passedNum,
             // animationDuration
           }
           ],
@@ -116,7 +116,7 @@ export default {
             x:'left',      //可设定图例在左、右、居中
             y:'top',     //可设定图例在上、下、居中
             padding:[0,0,0,50],   //可设定图例[距上方距离，距右方距离，距下方距离，距左方距离]
-            data: ['申请人数','申请总金额/10^3']
+            data: ['该类型总数','通过数']
           },
         });
 

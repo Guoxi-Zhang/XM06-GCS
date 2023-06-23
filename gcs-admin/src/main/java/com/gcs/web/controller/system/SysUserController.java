@@ -70,6 +70,7 @@ public class SysUserController extends BaseController
     public TableDataInfo list(SysUser user)
     {
         startPage();
+//        System.out.println("======================" + user.getUserId());
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }
@@ -78,6 +79,7 @@ public class SysUserController extends BaseController
     @GetMapping("/chart")
     public AjaxResult chartData(SysUser user)
     {
+//        System.out.println("======================" + SecurityUtils.get());
         AjaxResult ajax = AjaxResult.success();
         Map<String, Integer> map = new HashMap<String, Integer>();
         List<SysUser> list = userService.selectUserList(user);

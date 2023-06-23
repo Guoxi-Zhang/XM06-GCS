@@ -94,6 +94,18 @@
           v-hasPermi="['verify:verify_history:export']"
         >导出</el-button>
       </el-col>
+
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-news"
+          size="mini"
+          @click="handleStatistics"
+          v-hasPermi="['system:user:export']"
+        >统计</el-button>
+      </el-col>
+
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -141,6 +153,18 @@
       @pagination="getList"
     />
 
+    <!-- 图表对话框 -->
+    <el-dialog :title="title" :visible.sync="chart.open" width="700px" append-to-body>
+      <el-row style="width: 100%; font-weight: bold; top: 10px;" :gutter="10" :sm="24" :lg="24" type="flex">
+        <el-col :xs="18" :sm="18">
+          <div class="chart-wrapper">
+            <bar-chart />
+          </div>
+        </el-col>
+        <el-col :xs="6" :sm="6"></el-col>
+      </el-row>
+    </el-dialog>
+
     <!-- 添加或修改审核历史对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -184,12 +208,19 @@
 
 <script>
 import { listVerify_history, getVerify_history, delVerify_history, addVerify_history, updateVerify_history } from "@/api/verify/verify_history";
+import BarChart from './BarChart';
 
 export default {
   name: "Verify_history",
   dicts: ['apply_type', 'sys_yes_no', 'verify_action'],
+  components: { BarChart},
   data() {
     return {
+      chart:{
+        open:false,
+        title:"审核统计图表",
+      },
+
       // 遮罩层
       loading: true,
       // 选中数组
@@ -241,6 +272,12 @@ export default {
     this.getList();
   },
   methods: {
+    // 统计按钮
+    handleStatistics(){
+      this.chart.open = true;
+
+    },
+
     /** 查询审核历史列表 */
     getList() {
       this.loading = true;

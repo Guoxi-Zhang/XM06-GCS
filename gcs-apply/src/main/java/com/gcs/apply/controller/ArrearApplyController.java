@@ -1,5 +1,6 @@
 package com.gcs.apply.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,26 +57,36 @@ public class ArrearApplyController extends BaseController
     {
         AjaxResult ajax = AjaxResult.success();
         Map<String, Integer> map = new HashMap<String, Integer>();
+        Map<String, BigDecimal> amountMap = new HashMap<String, BigDecimal>();
         List<ArrearApply> list = arrearApplyService.selectArrearApplyListWithInfo(arrearApply);
         for(ArrearApply a : list){
+            BigDecimal amount = a.getArrearAmount();
             String reason = a.getArrearReason();
             if(map.containsKey(reason)){
                 int num = map.get(reason);
+                BigDecimal remainingAmount = amountMap.get(reason);
                 map.replace(reason, num+1);
+                amountMap.replace(reason, remainingAmount.add(amount));
             }else{
                 map.put(reason, 1);
+                amountMap.put(reason, amount);
             }
+
         }
 
         List<String> reason = new ArrayList<>();
         List<Integer> num = new ArrayList<>();
+        List<BigDecimal> amount = new ArrayList<>();
         for(Map.Entry<String, Integer> entry : map.entrySet()){
             reason.add(entry.getKey());
             num.add(entry.getValue());
         }
+        for(Map.Entry<String, BigDecimal> entry : amountMap.entrySet()){
+            amount.add(entry.getValue().divide(new BigDecimal(1000)));
+        }
         ajax.put("num",num);
         ajax.put("reason",reason);
-
+        ajax.put("amount", amount);
         return ajax;
     }
 
