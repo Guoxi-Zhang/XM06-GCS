@@ -28,18 +28,8 @@
         </el-form-item>
       </el-col>
       <el-col :span="8">
-        <el-form-item label="欠费项目" prop="arearId">
-          <dict-tag :options="dict.type.arrear_type" :value="formData.arearId"/>
-        </el-form-item>
-      </el-col>
-      <el-col :span="8">
-        <el-form-item label="应缴金额" prop="arearCost">
-          {{formData.arearCost}}
-        </el-form-item>
-      </el-col>
-      <el-col :span="8">
-        <el-form-item label="欠费原因" prop="arearReason">
-          <dict-tag :options="dict.type.arrear_reason" :value="formData.arearReason"/>
+        <el-form-item label="爱心礼包ID" prop="packId">
+          {{formData.packId}}
         </el-form-item>
       </el-col>
       <el-col :span="8">
@@ -50,31 +40,6 @@
       <el-col :span="8">
         <el-form-item label="审核状态" prop="applyState">
           <dict-tag :options="dict.type.verify_state" :value="formData.applyState"/>
-        </el-form-item>
-      </el-col>
-      <el-col :span="24">
-        <el-form-item label="缓缴金额" prop="arearAmount">
-          <el-input v-model="formData.arearAmount" placeholder="请输入缓缴金额"  :style="{width: '100%'}"
-                    v-if="testVerifible()">
-          </el-input>
-          <span v-else>{{formData.arearAmount}}</span>
-        </el-form-item>
-      </el-col>
-
-      <el-col :span="12" v-if="testVerifible()">
-        <el-form-item size="large">
-          <el-button type="primary" @click="submitForm">修改</el-button>
-        </el-form-item>
-      </el-col>
-
-      <el-col :span="24">
-        <el-form-item label="附件" prop="nowStep">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleDownload(formData.arearAttn)"
-          >下载</el-button>
         </el-form-item>
       </el-col>
     </el-form>
@@ -143,11 +108,11 @@
 </template>
 
 <script>
-import { getArearVerifyByApplyId, modifyArearApply, addArearVerify } from "@/api/verify/arear_list";
+import { getVerifyListByApplyId, modifyPackApply, addPackVerify } from "@/api/verify/pack_list";
 
 export default {
   name: "Dict",
-  dicts: ['sys_normal_disable', 'verify_action', 'verify_state', 'verify_unit', 'arrear_type', 'arrear_reason'],
+  dicts: ['sys_normal_disable', 'verify_action', 'verify_state', 'verify_unit'],
   data() {
     return {
       // 遮罩层
@@ -182,25 +147,11 @@ export default {
         studentName: undefined,
         school: undefined,
         grade: undefined,
+        packId: undefined,
         nowStep: undefined,
         applyState: undefined,
-
-        arearId: undefined,
-        arearAttn: undefined,
-        arearAmount: undefined,
-        arearReason: undefined,
-        arearCost: undefined
       },
       rules: {
-        arearAmount: [{
-          required: true,
-          message: '请输入缓缴金额',
-          trigger: 'blur'
-        }, {
-          pattern: 81 ,
-          message: '请输入数字',
-          trigger: 'blur'
-        }],
         dictName: [
           { required: true, message: "字典名称不能为空", trigger: "blur" }
         ],
@@ -222,7 +173,7 @@ export default {
     getList() {
       this.loading = true;
       console.log("getVerifyListByApplyId")
-      getArearVerifyByApplyId(this.queryParams).then(response => {
+      getVerifyListByApplyId(this.queryParams).then(response => {
           this.total = response.total;
           this.loading = false;
           if (response.total > 0) {
@@ -231,15 +182,10 @@ export default {
             this.formData.studentName = response.rows[0].studentName
             this.formData.school = response.rows[0].school
             this.formData.grade = response.rows[0].grade
+            this.formData.packId = response.rows[0].packId
             this.formData.nowStep = response.rows[0].nowStep
             this.formData.applyState = response.rows[0].applyState;
             this.verifyList = response.rows[0].verifyHistories;
-
-            this.formData.arearId = response.rows[0].arearId
-            this.formData.arearAttn = response.rows[0].arearAttn
-            this.formData.arearAmount = response.rows[0].arearAmount
-            this.formData.arearReason = response.rows[0].arearReason
-            this.formData.arearCost = response.rows[0].arearCost
           }
         }
       );
@@ -293,15 +239,7 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs['elForm'].validate(valid => {
-        if (!valid) return
-
-        modifyArearApply({
-          tableId: this.formData.tableId,
-          arearAmount: this.formData.arearAmount
-        });
-        location.reload()
-      })
+      console.log("no submit")
     },
     resetForm() {
       this.$refs['elForm'].resetFields()
@@ -351,17 +289,9 @@ export default {
         verifyAction: this.form.verifyAction,
         verifyAdvice: this.form.verifyAdvice
       };
-      addArearVerify(query);
+      addPackVerify(query);
       this.open = false;
       location.reload()
-    },
-    handleDownload(url) {
-      let name = url.substring(url.lastIndexOf("/")+1, url.length);
-      const a = document.createElement('a')
-      a.setAttribute('download', name)
-      a.setAttribute('target', '_blank')
-      a.setAttribute('href', url)
-      a.click()
     }
   }
 };

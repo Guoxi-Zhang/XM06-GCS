@@ -4,39 +4,40 @@ import com.gcs.common.annotation.Excel;
 
 import java.util.List;
 
-public class ArearVerify {
+public class PackVerify {
 
+    @Excel(name = "申请编号")
     private Long tableId;
 
+    /** 学生学号 */
+    @Excel(name = "学生学号")
     private Long studentId;
 
-    private Long batchId;
+    private Long deptId;
 
-    private Long arearId;
+    private Long packId;
 
-    private Double arearAmount;
+    /** 逻辑删除 */
+    private Integer isDeleted;
 
-    private String arearReason;
+    // 审核单位
+    private Integer nowStep;
 
-    private String arearAttn;
+    // 审核状态
+    private Integer applyState;
 
-    private Long nowStep;
-
-    private Long applyState;
-
-
+    @Excel(name = "学生姓名")
     private String studentName;
 
-    private String arearName;
-
-    private Double arearCost;
-
-
+    @Excel(name = "学院")
     private String school;
 
+    @Excel(name = "年级")
     private String grade;
 
     private List<VerifyHistory> verifyHistories;
+
+    private List<Gift> gifts;
 
     public Long getTableId() {
         return tableId;
@@ -54,51 +55,43 @@ public class ArearVerify {
         this.studentId = studentId;
     }
 
-    public Long getBatchId() {
-        return batchId;
+    public Long getDeptId() {
+        return deptId;
     }
 
-    public void setBatchId(Long batchId) {
-        this.batchId = batchId;
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
     }
 
-    public Long getArearId() {
-        return arearId;
+    public Long getPackId() {
+        return packId;
     }
 
-    public void setArearId(Long arearId) {
-        this.arearId = arearId;
+    public void setPackId(Long packId) {
+        this.packId = packId;
     }
 
-    public Double getArearAmount() {
-        return arearAmount;
+    public Integer getIsDeleted() {
+        return isDeleted;
     }
 
-    public void setArearAmount(Double arearAmount) {
-        this.arearAmount = arearAmount;
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
-    public String getArearReason() {
-        return arearReason;
-    }
-
-    public void setArearReason(String arearReason) {
-        this.arearReason = arearReason;
-    }
-
-    public Long getNowStep() {
+    public Integer getNowStep() {
         return nowStep;
     }
 
-    public void setNowStep(Long nowStep) {
+    public void setNowStep(Integer nowStep) {
         this.nowStep = nowStep;
     }
 
-    public Long getApplyState() {
+    public Integer getApplyState() {
         return applyState;
     }
 
-    public void setApplyState(Long applyState) {
+    public void setApplyState(Integer applyState) {
         this.applyState = applyState;
     }
 
@@ -108,22 +101,6 @@ public class ArearVerify {
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
-    }
-
-    public String getArearName() {
-        return arearName;
-    }
-
-    public void setArearName(String arearName) {
-        this.arearName = arearName;
-    }
-
-    public Double getArearCost() {
-        return arearCost;
-    }
-
-    public void setArearCost(Double arearCost) {
-        this.arearCost = arearCost;
     }
 
     public String getSchool() {
@@ -150,31 +127,29 @@ public class ArearVerify {
         this.verifyHistories = verifyHistories;
     }
 
-    public String getArearAttn() {
-        return arearAttn;
+    public List<Gift> getGifts() {
+        return gifts;
     }
 
-    public void setArearAttn(String arearAttn) {
-        this.arearAttn = arearAttn;
+    public void setGifts(List<Gift> gifts) {
+        this.gifts = gifts;
     }
 
     @Override
     public String toString() {
-        return "ArearVerify{" +
+        return "PackVerify{" +
                 "tableId=" + tableId +
                 ", studentId=" + studentId +
-                ", batchId=" + batchId +
-                ", arearId=" + arearId +
-                ", arearAmount=" + arearAmount +
-                ", arearReason='" + arearReason + '\'' +
+                ", deptId=" + deptId +
+                ", packId=" + packId +
+                ", isDeleted=" + isDeleted +
                 ", nowStep=" + nowStep +
                 ", applyState=" + applyState +
                 ", studentName='" + studentName + '\'' +
-                ", arearName='" + arearName + '\'' +
-                ", arearCost=" + arearCost +
                 ", school='" + school + '\'' +
                 ", grade='" + grade + '\'' +
                 ", verifyHistories=" + verifyHistories +
+                ", gifts=" + gifts +
                 '}';
     }
 }

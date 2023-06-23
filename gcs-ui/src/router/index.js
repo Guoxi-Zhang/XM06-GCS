@@ -188,6 +188,19 @@ export const dynamicRoutes = [
       }
     ]
   },
+  {
+    path: '/verify/pack_list',
+    component: Layout,
+    hidden: true,
+    permissions: ['verify:pack_list:detail'],
+    children: [
+      {
+        path: 'verify_list/:applyId',
+        component: () => import('@/views/verify/pack_list/verify_list'),
+        name: 'PackVerify'
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错
