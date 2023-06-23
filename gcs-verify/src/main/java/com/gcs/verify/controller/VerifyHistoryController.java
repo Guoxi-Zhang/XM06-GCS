@@ -1,7 +1,14 @@
 package com.gcs.verify.controller;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
+//import javafx.util.Pair;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +51,55 @@ public class VerifyHistoryController extends BaseController
         startPage();
         List<VerifyHistory> list = verifyHistoryService.selectVerifyHistoryList(verifyHistory);
         return getDataTable(list);
+    }
+
+    //统计图表
+    @GetMapping("/chart")
+    public AjaxResult chartData(VerifyHistory verifyHistory)
+    {
+        AjaxResult ajax = AjaxResult.success();
+        //申请类型、总数、通过数
+        Map<Long, int[]> map = new HashMap<Long, int[]>();
+
+        List<VerifyHistory> list = verifyHistoryService.selectVerifyHistoryList(verifyHistory);
+        for(VerifyHistory a : list){
+            Long type = a.getApplyType();
+            Long passed = a.getVerifyAction();
+            int[] pair = new int[2];
+            if(map.containsKey(type)){
+                pair = map.get(type);
+                //通过
+                if(passed == 3){
+                    pair[1]++;
+                }//未通过
+                pair[0]++;
+                map.replace(type, pair);
+
+            }else{
+                if(passed == 3){
+                    pair[1] = 1;
+
+                }
+                pair[0] = 1;
+                map.put(type, pair);
+
+            }
+
+        }
+
+        List<Long> type = new ArrayList<>();
+        List<Integer> totalNum = new ArrayList<>();
+        List<Integer> passedNum = new ArrayList<>();
+        for(Map.Entry<Long, int[]> entry : map.entrySet()){
+            type.add(entry.getKey());
+            totalNum.add(entry.getValue()[0]);
+            passedNum.add(entry.getValue()[1]);
+        }
+
+        ajax.put("type",type);
+        ajax.put("totalNum",totalNum);
+        ajax.put("passedNum", passedNum);
+        return ajax;
     }
 
     /**

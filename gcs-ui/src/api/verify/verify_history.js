@@ -9,6 +9,14 @@ export function listVerify_history(query) {
   })
 }
 
+// 统计信息
+export function getStatistics() {
+  return request({
+    url: '/verify/verify_history/chart',
+    method: 'get'
+  })
+}
+
 // 查询审核历史详细
 export function getVerify_history(verifyId) {
   return request({

@@ -18,7 +18,7 @@
       },
       width: {
         type: String,
-        default: '100%'
+        default: '130%'
       },
       height: {
         type: String,
@@ -49,6 +49,7 @@
         this.chart = echarts.init(this.$el, 'macarons');
 
         getStatistics().then(response => {
+          console.log(response);
           this.dept = JSON.parse(JSON.stringify(response.dept));
           this.num = JSON.parse(JSON.stringify(response.num));
 
@@ -80,13 +81,20 @@
               }
             }],
             series: [{
-              name: '人数',
+              name: '总人数',
               type: 'bar',
               stack: 'vistors',
               barWidth: '60%',
               data: this.num,
-              animationDuration
+              // animationDuration
             }],
+            legend: {
+              orient: 'vertical',
+              x:'left',      //可设定图例在左、右、居中
+              y:'top',     //可设定图例在上、下、居中
+              padding:[0,0,0,50],   //可设定图例[距上方距离，距右方距离，距下方距离，距左方距离]
+              data: ['总人数']
+            },
           });
         });
       }
