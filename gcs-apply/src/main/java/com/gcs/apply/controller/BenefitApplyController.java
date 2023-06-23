@@ -1,7 +1,12 @@
 package com.gcs.apply.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
+
+import com.gcs.common.core.domain.entity.SysUser;
+import com.gcs.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,6 +72,19 @@ public class BenefitApplyController extends BaseController
     public AjaxResult getInfo(@PathVariable("tableId") Long tableId)
     {
         return success(benefitApplyService.selectBenefitApplyByTableId(tableId));
+    }
+
+    @GetMapping("/user_info")
+    public Map<String,Long> getUserRole()
+    {
+        Map<String,Long> map = new HashMap<String,Long>();
+        SysUser user = SecurityUtils.getLoginUser().getUser();
+        Long userId = SecurityUtils.getUserId();
+        Long roleId=user.getRoles().get(0).getRoleId();
+        map.put("roleId",roleId);
+        map.put("userId",userId);
+        map.put("operatorId",userId);
+        return map;
     }
 
     /**

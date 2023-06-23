@@ -17,6 +17,13 @@ export function getStatistics() {
   })
 }
 
+export function getRoleInfo() {
+  return request({
+    url: '/arrear/arrear_apply/user_info',
+    method: 'get'
+  })
+}
+
 // 查询欠缴费申请详细
 export function getArrear_apply(tableId) {
   return request({

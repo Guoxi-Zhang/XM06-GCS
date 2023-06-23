@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function getRoleInfo() {
+  return request({
+    url: '/pack_apply/pack_apply/user_info',
+    method: 'get'
+  })
+}
+
 // 查询爱心大礼包申请列表
 export function listPack_apply(query) {
   return request({

@@ -227,13 +227,13 @@
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="学生学号" prop="studentId">
-          <el-input v-model="form.studentId" placeholder="请输入学生学号" />
+          <el-input v-model="form.studentId" placeholder="请输入学生学号" :readonly="isStudent" />
         </el-form-item>
         <el-form-item label="申请人学号/工号" prop="operatorId">
-          <el-input v-model="form.operatorId" placeholder="请输入申请人学号/工号" />
+          <el-input v-model="form.operatorId" placeholder="请输入申请人学号/工号" :readonly="isStudent"/>
         </el-form-item>
         <el-form-item label="申请单位" prop="operatorType">
-        <el-select v-model="form.operatorType" placeholder="请选择申请单位">
+        <el-select v-model="form.operatorType" placeholder="请选择申请单位":disabled="isStudent">
           <el-option
             v-for="dict in dict.type.applicant_type"
             :key="dict.value"
@@ -284,7 +284,7 @@
 </template>
 
 <script>
-import { listArrear_apply, getArrear_apply, delArrear_apply, addArrear_apply, updateArrear_apply } from "@/api/arrear/arrear_apply";
+import { listArrear_apply, getArrear_apply, delArrear_apply, addArrear_apply, updateArrear_apply,getRoleInfo } from "@/api/arrear/arrear_apply";
 import BarChart from './BarChart';
 import Treeselect from "@riophae/vue-treeselect";
 export default {
@@ -298,7 +298,6 @@ export default {
         open:false,
         title:"欠费原因人数统计图表",
       },
-
       // 遮罩层
       loading: true,
       // 选中数组
@@ -357,7 +356,11 @@ export default {
         arrearReason: [
           { required: true, message: "欠费原因不能为空", trigger: "blur" }
         ],
-      }
+      },
+      isStudent: false,
+      myStudentId: null,
+      myOperatorId: null,
+      myOperatorType: null,
     };
   },
   created() {
@@ -423,6 +426,21 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      getRoleInfo().then(response => {
+        console.log(response);
+        if (response.roleId == 102) {
+          // 将返回的数据绑定到 form 对象上
+          console.log("1111111");
+          this.form.studentId = response.userId;
+          this.form.operatorId = response.operatorId;
+          this.form.operatorType = 0;
+          // this.myStudentId = response.userId;
+          // this.myOperatorId = response.operatorId;
+          // this.myOperatorType = 0;
+          // 设置 isStudent
+          this.isStudent = true; // 假设返回的数据中有 isStudent 字段，否则你需要根据实际情况来判断
+        }
+      })
       this.open = true;
       this.title = "添加欠缴费申请";
     },

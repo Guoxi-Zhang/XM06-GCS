@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function getRoleInfo() {
+  return request({
+    url: '/benefit/benefit_apply/user_info',
+    method: 'get'
+  })
+}
+
 // 查询补助申请列表
 export function listBenefit_apply(query) {
   return request({

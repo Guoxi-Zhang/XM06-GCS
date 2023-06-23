@@ -302,6 +302,7 @@ public class SysUser extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("userId", getUserId())
             .append("deptId", getDeptId())
+            .append("roleId", getRoleId())
             .append("userName", getUserName())
             .append("nickName", getNickName())
             .append("email", getEmail())

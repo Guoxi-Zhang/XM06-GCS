@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gcs.common.core.domain.entity.SysUser;
+import com.gcs.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -79,6 +80,18 @@ public class ArrearApplyController extends BaseController
         return ajax;
     }
 
+    @GetMapping("/user_info")
+    public Map<String,Long> getUserRole()
+    {
+        Map<String,Long> map = new HashMap<String,Long>();
+        SysUser user = SecurityUtils.getLoginUser().getUser();
+        Long userId = SecurityUtils.getUserId();
+        Long roleId=user.getRoles().get(0).getRoleId();
+        map.put("roleId",roleId);
+        map.put("userId",userId);
+        map.put("operatorId",userId);
+        return map;
+    }
 
     /**
      * 导出欠缴费申请列表
@@ -113,9 +126,9 @@ public class ArrearApplyController extends BaseController
     public AjaxResult add(@RequestBody ArrearApply arrearApply)
     {
         List<ArrearApply> list = arrearApplyService.selectArrearApplyWithRepeat(arrearApply);
-        Long arrearId = arrearApply.getArrearId();
-        Long studentId = arrearApply.getStudentId();
-        Long batchId = arrearApply.getBatchId();
+        Long arrearId = arrearApply.getArrearId();      //项目
+        Long studentId = arrearApply.getStudentId();    //学号
+        Long batchId = arrearApply.getBatchId();        //批次
         System.out.println(arrearId +studentId + batchId);
         int i = 0;
         for(ArrearApply x: list){
