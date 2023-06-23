@@ -1,6 +1,8 @@
 package com.gcs.apply.service.impl;
 
 import java.util.List;
+
+import com.gcs.common.annotation.DataScope;
 import com.gcs.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class BenefitApplyServiceImpl implements IBenefitApplyService
      * @return 补助申请
      */
     @Override
+    @DataScope(deptAlias = "benefit_apply", userAlias = "benefit_apply")
     public BenefitApply selectBenefitApplyByTableId(Long tableId)
     {
         return benefitApplyMapper.selectBenefitApplyByTableId(tableId);
@@ -39,6 +42,7 @@ public class BenefitApplyServiceImpl implements IBenefitApplyService
      * @return 补助申请
      */
     @Override
+    @DataScope(deptAlias = "benefit_apply", userAlias = "benefit_apply")
     public List<BenefitApply> selectBenefitApplyList(BenefitApply benefitApply)
     {
         return benefitApplyMapper.selectBenefitApplyList(benefitApply);
@@ -51,6 +55,7 @@ public class BenefitApplyServiceImpl implements IBenefitApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "benefit_apply", userAlias = "benefit_apply")
     public int insertBenefitApply(BenefitApply benefitApply)
     {
         benefitApply.setCreateTime(DateUtils.getNowDate());
@@ -64,6 +69,7 @@ public class BenefitApplyServiceImpl implements IBenefitApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "benefit_apply", userAlias = "benefit_apply")
     public int updateBenefitApply(BenefitApply benefitApply)
     {
         benefitApply.setUpdateTime(DateUtils.getNowDate());
@@ -77,6 +83,7 @@ public class BenefitApplyServiceImpl implements IBenefitApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "benefit_apply", userAlias = "benefit_apply")
     public int deleteBenefitApplyByTableIds(Long[] tableIds)
     {
         return benefitApplyMapper.deleteBenefitApplyByTableIds(tableIds);
@@ -89,6 +96,7 @@ public class BenefitApplyServiceImpl implements IBenefitApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "benefit_apply", userAlias = "benefit_apply")
     public int deleteBenefitApplyByTableId(Long tableId)
     {
         return benefitApplyMapper.deleteBenefitApplyByTableId(tableId);

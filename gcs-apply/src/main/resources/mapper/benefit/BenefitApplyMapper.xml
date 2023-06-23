@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="BenefitApply" id="BenefitApplyResult">
         <result property="tableId"    column="table_id"    />
-        <result property="studentId"    column="student_id"    />
+        <result property="studentId"    column="user_id"    />
         <result property="operatorId"    column="operator_id"    />
         <result property="operatorType"    column="operator_type"    />
         <result property="liveBenefit"    column="live_benefit"    />
@@ -20,14 +20,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBenefitApplyVo">
-        select table_id, student_id, operator_id, operator_type, live_benefit, travel_benefit, batch_id, create_time, update_time, is_deleted, now_step, apply_state from benefit_apply
+        select table_id, user_id, operator_id, operator_type, live_benefit, travel_benefit, batch_id, create_time, update_time, is_deleted, now_step, apply_state from benefit_apply
     </sql>
 
     <select id="selectBenefitApplyList" parameterType="BenefitApply" resultMap="BenefitApplyResult">
         <include refid="selectBenefitApplyVo"/>
-        <where>
+        <where>1=1
             <if test="tableId != null "> and table_id = #{tableId}</if>
-            <if test="studentId != null  and studentId != ''"> and student_id like concat('%', #{studentId}, '%')</if>
+            <if test="studentId != null  and studentId != ''"> and user_id like concat('%', #{studentId}, '%')</if>
             <if test="operatorId != null  and operatorId != ''"> and operator_id like concat('%', #{operatorId}, '%')</if>
             <if test="operatorType != null "> and operator_type = #{operatorType}</if>
             <if test="liveBenefit != null "> and live_benefit &lt;= #{liveBenefit}</if>
@@ -36,6 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nowStep != null "> and now_step = #{nowStep}</if>
             <if test="applyState != null "> and apply_state = #{applyState}</if>
         </where>
+        ${params.dataScope}
     </select>
     
     <select id="selectBenefitApplyByTableId" parameterType="Long" resultMap="BenefitApplyResult">
@@ -46,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertBenefitApply" parameterType="BenefitApply" useGeneratedKeys="true" keyProperty="tableId">
         insert into benefit_apply
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="studentId != null and studentId != ''">student_id,</if>
+            <if test="studentId != null and studentId != ''">user_id,</if>
             <if test="operatorId != null and operatorId != ''">operator_id,</if>
             <if test="operatorType != null">operator_type,</if>
             <if test="liveBenefit != null">live_benefit,</if>
@@ -76,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateBenefitApply" parameterType="BenefitApply">
         update benefit_apply
         <trim prefix="SET" suffixOverrides=",">
-            <if test="studentId != null and studentId != ''">student_id = #{studentId},</if>
+            <if test="studentId != null and studentId != ''">user_id = #{studentId},</if>
             <if test="operatorId != null and operatorId != ''">operator_id = #{operatorId},</if>
             <if test="operatorType != null">operator_type = #{operatorType},</if>
             <if test="liveBenefit != null">live_benefit = #{liveBenefit},</if>

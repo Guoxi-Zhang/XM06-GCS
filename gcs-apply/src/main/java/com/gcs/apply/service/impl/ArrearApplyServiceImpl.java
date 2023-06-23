@@ -1,6 +1,8 @@
 package com.gcs.apply.service.impl;
 
 import java.util.List;
+
+import com.gcs.common.annotation.DataScope;
 import com.gcs.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +29,13 @@ public class ArrearApplyServiceImpl implements IArrearApplyService
      * @return 欠缴费申请
      */
     @Override
+    @DataScope(deptAlias = "arrear_apply", userAlias = "arrear_apply")
     public ArrearApply selectArrearApplyByTableId(Long tableId)
     {
         return arrearApplyMapper.selectArrearApplyByTableId(tableId);
     }
     @Override
+    @DataScope(deptAlias = "arrear_apply", userAlias = "arrear_apply")
     public ArrearApply selectArrearApplyWithInfoByTableId(Long tableId)
     {
         return arrearApplyMapper.selectArrearApplyWithInfoByTableId(tableId);
@@ -44,15 +48,19 @@ public class ArrearApplyServiceImpl implements IArrearApplyService
      * @return 欠缴费申请
      */
     @Override
+    @DataScope(deptAlias = "arrear_apply", userAlias = "arrear_apply")
     public List<ArrearApply> selectArrearApplyList(ArrearApply arrearApply)
     {
         return arrearApplyMapper.selectArrearApplyList(arrearApply);
     }
     @Override
+    @DataScope(deptAlias = "arrear_apply", userAlias = "arrear_apply")
     public List<ArrearApply> selectArrearApplyListWithInfo(ArrearApply arrearApply)
     {
         return arrearApplyMapper.selectArrearApplyListWithInfo(arrearApply);
     }
+    @Override
+    @DataScope(deptAlias = "arrear_apply", userAlias = "arrear_apply")
     public List<ArrearApply> selectArrearApplyWithRepeat(ArrearApply arrearApply)
     {
         return arrearApplyMapper.selectArrearApplyWithRepeat(arrearApply);
@@ -65,6 +73,7 @@ public class ArrearApplyServiceImpl implements IArrearApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "arrear_apply", userAlias = "arrear_apply")
     public int insertArrearApply(ArrearApply arrearApply)
     {
         arrearApply.setCreateTime(DateUtils.getNowDate());
@@ -78,6 +87,7 @@ public class ArrearApplyServiceImpl implements IArrearApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "arrear_apply", userAlias = "arrear_apply")
     public int updateArrearApply(ArrearApply arrearApply)
     {
         arrearApply.setUpdateTime(DateUtils.getNowDate());
@@ -91,6 +101,7 @@ public class ArrearApplyServiceImpl implements IArrearApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "arrear_apply", userAlias = "arrear_apply")
     public int deleteArrearApplyByTableIds(Long[] tableIds)
     {
         return arrearApplyMapper.deleteArrearApplyByTableIds(tableIds);
@@ -103,6 +114,7 @@ public class ArrearApplyServiceImpl implements IArrearApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "arrear_apply", userAlias = "arrear_apply")
     public int deleteArrearApplyByTableId(Long tableId)
     {
         return arrearApplyMapper.deleteArrearApplyByTableId(tableId);

@@ -1,6 +1,8 @@
 package com.gcs.apply.service.impl;
 
 import java.util.List;
+
+import com.gcs.common.annotation.DataScope;
 import com.gcs.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class PackApplyServiceImpl implements IPackApplyService
      * @return 爱心大礼包申请
      */
     @Override
+    @DataScope(deptAlias = "pack_apply", userAlias = "pack_apply")
     public PackApply selectPackApplyByTableId(Long tableId)
     {
         return packApplyMapper.selectPackApplyByTableId(tableId);
@@ -39,6 +42,7 @@ public class PackApplyServiceImpl implements IPackApplyService
      * @return 爱心大礼包申请
      */
     @Override
+    @DataScope(deptAlias = "pack_apply", userAlias = "pack_apply")
     public List<PackApply> selectPackApplyList(PackApply packApply)
     {
         return packApplyMapper.selectPackApplyList(packApply);
@@ -51,6 +55,7 @@ public class PackApplyServiceImpl implements IPackApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "pack_apply", userAlias = "pack_apply")
     public int insertPackApply(PackApply packApply)
     {
         packApply.setCreateTime(DateUtils.getNowDate());
@@ -64,6 +69,7 @@ public class PackApplyServiceImpl implements IPackApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "pack_apply", userAlias = "pack_apply")
     public int updatePackApply(PackApply packApply)
     {
         packApply.setUpdateTime(DateUtils.getNowDate());
@@ -77,6 +83,7 @@ public class PackApplyServiceImpl implements IPackApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "pack_apply", userAlias = "pack_apply")
     public int deletePackApplyByTableIds(Long[] tableIds)
     {
         return packApplyMapper.deletePackApplyByTableIds(tableIds);
@@ -89,6 +96,7 @@ public class PackApplyServiceImpl implements IPackApplyService
      * @return 结果
      */
     @Override
+    @DataScope(deptAlias = "pack_apply", userAlias = "pack_apply")
     public int deletePackApplyByTableId(Long tableId)
     {
         return packApplyMapper.deletePackApplyByTableId(tableId);

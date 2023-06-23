@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="PackApply" id="PackApplyResult">
         <result property="tableId"    column="table_id"    />
-        <result property="studentId"    column="student_id"    />
+        <result property="studentId"    column="user_id"    />
         <result property="operatorId"    column="operator_id"    />
         <result property="operatorType"    column="operator_type"    />
         <result property="packId"    column="pack_id"    />
@@ -19,13 +19,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPackApplyVo">
-        select table_id, student_id, operator_id, operator_type, pack_id, apply_reason, create_time, update_time, is_deleted, now_step, apply_state from pack_apply
+        select table_id, user_id, operator_id, operator_type, pack_id, apply_reason, create_time, update_time, is_deleted, now_step, apply_state from pack_apply
     </sql>
 
     <select id="selectPackApplyList" parameterType="PackApply" resultMap="PackApplyResult">
         <include refid="selectPackApplyVo"/>
-        <where>  
-            <if test="studentId != null "> and student_id = #{studentId}</if>
+        <where> 1=1
+            <if test="studentId != null "> and user_id = #{studentId}</if>
             <if test="operatorId != null "> and operator_id = #{operatorId}</if>
             <if test="operatorType != null "> and operator_type = #{operatorType}</if>
             <if test="packId != null "> and pack_id = #{packId}</if>
@@ -33,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nowStep != null "> and now_step = #{nowStep}</if>
             <if test="applyState != null "> and apply_state = #{applyState}</if>
         </where>
+        ${params.dataScope}
     </select>
     
     <select id="selectPackApplyByTableId" parameterType="Long" resultMap="PackApplyResult">
@@ -43,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertPackApply" parameterType="PackApply" useGeneratedKeys="true" keyProperty="tableId">
         insert into pack_apply
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="studentId != null">student_id,</if>
+            <if test="studentId != null">user_id,</if>
             <if test="operatorId != null">operator_id,</if>
             <if test="operatorType != null">operator_type,</if>
             <if test="packId != null">pack_id,</if>
@@ -71,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updatePackApply" parameterType="PackApply">
         update pack_apply
         <trim prefix="SET" suffixOverrides=",">
-            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="studentId != null">user_id = #{studentId},</if>
             <if test="operatorId != null">operator_id = #{operatorId},</if>
             <if test="operatorType != null">operator_type = #{operatorType},</if>
             <if test="packId != null">pack_id = #{packId},</if>

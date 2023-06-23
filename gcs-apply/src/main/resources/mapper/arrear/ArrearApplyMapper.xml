@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="ArrearApply" id="ArrearApplyResult">
         <result property="tableId"    column="table_id"    />
-        <result property="studentId"    column="student_id"    />
+        <result property="studentId"    column="user_id"    />
         <result property="operatorId"    column="operator_id"    />
         <result property="operatorType"    column="operator_type"    />
         <result property="batchId"    column="batch_id"    />
@@ -23,14 +23,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectArrearApplyVo">
-        select table_id, student_id, operator_id, operator_type, batch_id, arrear_id, arrear_amount, arrear_reason, arrear_attn, create_time, update_time, is_deleted, now_step, apply_state from arrear_apply
+        select table_id, user_id, operator_id, operator_type, batch_id, arrear_id, arrear_amount, arrear_reason, arrear_attn, create_time, update_time, is_deleted, now_step, apply_state from arrear_apply
     </sql>
 
     <select id="selectArrearApplyList" parameterType="ArrearApply" resultMap="ArrearApplyResult">
         <include refid="selectArrearApplyVo"/>
-        <where>  
+        <where> 1=1
             <if test="tableId != null "> and table_id = #{tableId}</if>
-            <if test="studentId != null  and studentId != ''"> and student_id like concat('%', #{studentId}, '%')</if>
+            <if test="studentId != null  and studentId != ''"> and user_id like concat('%', #{studentId}, '%')</if>
             <if test="operatorId != null  and operatorId != ''"> and operator_id like concat('%', #{operatorId}, '%')</if>
             <if test="operaarType != null "> and operator_type = #{operatorType}</if>
             <if test="batchId != null "> and batch_id = #{batchId}</if>
@@ -39,17 +39,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nowStep != null "> and now_step = #{nowStep}</if>
             <if test="applyState != null "> and apply_state = #{applyState}</if>
         </where>
+        ${params.dataScope}
     </select>
 
     <select id="selectArrearApplyListWithInfo" parameterType="ArrearApply" resultMap="ArrearApplyResult">
-        select table_id, student_id, operator_id, operator_type, batch_id, arrear_id,
+        select table_id, user_id, operator_id, operator_type, batch_id, arrear_id,
         arrear_amount, arrear_reason, arrear_attn, create_time, update_time, is_deleted, now_step,
         apply_state, arrear_info.arrear_cost
         from arrear_apply
         left join arrear_info on arrear_apply.arrear_id = arrear_info.id
-        <where>
+        <where> 1=1
             <if test="tableId != null "> and table_id = #{tableId}</if>
-            <if test="studentId != null  and studentId != ''"> and student_id like concat('%', #{studentId}, '%')</if>
+            <if test="studentId != null  and studentId != ''"> and user_id like concat('%', #{studentId}, '%')</if>
             <if test="operatorId != null  and operatorId != ''"> and operator_id like concat('%', #{operatorId}, '%')</if>
             <if test="operatorType != null "> and operator_type = #{operatorType}</if>
             <if test="batchId != null "> and batch_id = #{batchId}</if>
@@ -58,6 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nowStep != null "> and now_step = #{nowStep}</if>
             <if test="applyState != null "> and apply_state = #{applyState}</if>
         </where>
+        ${params.dataScope}
     </select>
 
     <select id="selectArrearApplyByTableId" parameterType="Long" resultMap="ArrearApplyResult">
@@ -67,15 +69,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectArrearApplyWithRepeat" parameterType="ArrearApply" resultMap="ArrearApplyResult">
         <include refid="selectArrearApplyVo"/>
-        <where>
-            <if test="studentId != null  and studentId != ''"> and student_id = #{studentId}</if>
+        <where> 1=1
+            <if test="studentId != null  and studentId != ''"> and user_id = #{studentId}</if>
             <if test="batchId != null "> and batch_id = #{batchId}</if>
             <if test="arrearId != null "> and arrear_id = #{arrearId}</if>
         </where>
+        ${params.dataScope}
     </select>
 
     <select id="selectArrearApplyWithInfoByTableId" parameterType="Long" resultMap="ArrearApplyResult">
-        select table_id, student_id, operator_id, operator_type, batch_id, arrear_id,
+        select table_id, user_id, operator_id, operator_type, batch_id, arrear_id,
         arrear_amount, arrear_reason, arrear_attn, create_time, update_time, is_deleted, now_step,
         apply_state, arrear_info.arrear_cost
         from arrear_apply
@@ -86,7 +89,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertArrearApply" parameterType="ArrearApply" useGeneratedKeys="true" keyProperty="tableId">
         insert into arrear_apply
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="studentId != null and studentId != ''">student_id,</if>
+            <if test="studentId != null and studentId != ''">user_id,</if>
             <if test="operatorId != null and operatorId != ''">operator_id,</if>
             <if test="operatorType != null">operator_type,</if>
             <if test="batchId != null">batch_id,</if>
@@ -120,7 +123,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateArrearApply" parameterType="ArrearApply">
         update arrear_apply
         <trim prefix="SET" suffixOverrides=",">
-            <if test="studentId != null and studentId != ''">student_id = #{studentId},</if>
+            <if test="studentId != null and studentId != ''">user_id = #{studentId},</if>
             <if test="operatorId != null and operatorId != ''">operator_id = #{operatorId},</if>
             <if test="operatorType != null">operator_type = #{operatorType},</if>
             <if test="batchId != null">batch_id = #{batchId},</if>
