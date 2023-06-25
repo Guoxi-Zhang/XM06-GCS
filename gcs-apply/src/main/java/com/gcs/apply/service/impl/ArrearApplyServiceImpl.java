@@ -65,6 +65,10 @@ public class ArrearApplyServiceImpl implements IArrearApplyService
     {
         return arrearApplyMapper.selectArrearApplyWithRepeat(arrearApply);
     }
+    public List<Long> selectBatchBasedOnCurrentTimestamp()
+    {
+        return arrearApplyMapper.selectBatchBasedOnCurrentTimestamp();
+    }
 
     /**
      * 新增欠缴费申请

@@ -27,6 +27,7 @@ public interface BenefitApplyMapper
      */
     public List<BenefitApply> selectBenefitApplyList(BenefitApply benefitApply);
     public List<BenefitApply> selectBenefitApplyWithRepeat(BenefitApply benefitApply);
+    public List<Long> selectBatchBasedOnCurrentTimestamp();
 
     /**
      * 新增补助申请

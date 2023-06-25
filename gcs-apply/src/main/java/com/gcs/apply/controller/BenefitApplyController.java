@@ -97,9 +97,20 @@ public class BenefitApplyController extends BaseController
     public AjaxResult add(@RequestBody BenefitApply benefitApply)
     {
         List<BenefitApply> list = benefitApplyService.selectBenefitApplyWithRepeat(benefitApply);
+        List<Long> batches = benefitApplyService.selectBatchBasedOnCurrentTimestamp();
         Long studentId = benefitApply.getStudentId();    //学号
         Long batchId = benefitApply.getBatchId();        //批次
         int i = 0;
+        boolean flag = false;
+        for (Long x : batches) {
+            if (batchId == x) {
+                flag = true;
+                break;
+            }
+        }
+        if(!flag) {
+            return AjaxResult.error("批次不合法！请重新查看批次信息！");    // 返回error
+        }
         for(BenefitApply x: list){
             System.out.println(i + " :" + x.toString());
             if(x.getStudentId().equals(studentId) && x.getBatchId() == batchId){
