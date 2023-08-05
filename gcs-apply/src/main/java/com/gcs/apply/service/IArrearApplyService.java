@@ -29,6 +29,7 @@ public interface IArrearApplyService
     public List<ArrearApply> selectArrearApplyList(ArrearApply arrearApply);
     public List<ArrearApply> selectArrearApplyListWithInfo(ArrearApply arrearApply);
     public List<ArrearApply> selectArrearApplyWithRepeat(ArrearApply arrearApply);
+    public List<Long> selectBatchBasedOnCurrentTimestamp();
 
     /**
      * 新增欠缴费申请

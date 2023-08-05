@@ -53,6 +53,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ${params.dataScope}
     </select>
 
+    <select id="selectBatchBasedOnCurrentTimestamp" resultType="Long">
+        SELECT batch
+        FROM process_management
+        WHERE start_time &lt;= CURRENT_TIMESTAMP
+        AND end_time &gt;= CURRENT_TIMESTAMP
+    </select>
+
     <insert id="insertBenefitApply" parameterType="BenefitApply" useGeneratedKeys="true" keyProperty="tableId">
         insert into benefit_apply
         <trim prefix="(" suffix=")" suffixOverrides=",">

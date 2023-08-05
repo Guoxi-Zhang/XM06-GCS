@@ -76,6 +76,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         ${params.dataScope}
     </select>
+    <select id="selectBatchBasedOnCurrentTimestamp" resultType="Long">
+        SELECT batch
+        FROM process_management
+        WHERE start_time &lt;= CURRENT_TIMESTAMP
+        AND end_time &gt;= CURRENT_TIMESTAMP
+    </select>
 
     <select id="selectArrearApplyWithInfoByTableId" parameterType="Long" resultMap="ArrearApplyResult">
         select table_id, user_id, operator_id, operator_type, batch_id, arrear_id,

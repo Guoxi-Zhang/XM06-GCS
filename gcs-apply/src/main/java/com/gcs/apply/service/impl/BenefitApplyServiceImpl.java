@@ -54,6 +54,10 @@ public class BenefitApplyServiceImpl implements IBenefitApplyService
     {
         return benefitApplyMapper.selectBenefitApplyWithRepeat(benefitApply);
     }
+    public List<Long> selectBatchBasedOnCurrentTimestamp()
+    {
+        return benefitApplyMapper.selectBatchBasedOnCurrentTimestamp();
+    }
 
 
     /**
