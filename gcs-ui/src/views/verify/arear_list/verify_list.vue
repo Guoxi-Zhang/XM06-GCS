@@ -144,6 +144,7 @@
 
 <script>
 import { getArearVerifyByApplyId, modifyArearApply, addArearVerify } from "@/api/verify/arear_list";
+import { download } from "@/utils/request";
 
 export default {
   name: "Dict",
@@ -357,11 +358,13 @@ export default {
     },
     handleDownload(url) {
       let name = url.substring(url.lastIndexOf("/")+1, url.length);
-      const a = document.createElement('a')
-      a.setAttribute('download', name)
-      a.setAttribute('target', '_blank')
-      a.setAttribute('href', url)
-      a.click()
+      let params = {
+        resource:url
+      }
+      let config = {
+        method: "get"
+      }
+      download("/common/download/resource", params, name, config);
     }
   }
 };
