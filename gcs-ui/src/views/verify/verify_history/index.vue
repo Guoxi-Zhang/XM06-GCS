@@ -3,7 +3,7 @@
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="审核的申请表ID" prop="applyId">
         <el-input
-          v-model="queryParams.applyId"
+          v-model="queryParams.tableId"
           placeholder="请输入审核的申请表ID"
           clearable
           @keyup.enter.native="handleQuery"
@@ -243,7 +243,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        applyId: null,
+        tableId: null,
         applyType: null,
         verifyPersonId: null,
         verifyAction: null,

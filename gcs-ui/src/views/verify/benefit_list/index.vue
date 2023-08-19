@@ -1,10 +1,12 @@
 <template>
   <div class="app-container">
+    <span style="color:red" v-if="this.$auth.hasRole('admin')"> admin无法在此页面进行审核，请使用其他角色账号登陆,或前往审核管理页面进行管理</span>
+
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="申请表ID" prop="applyId">
         <el-input
-          v-model="queryParams.applyId"
+          v-model="queryParams.tableId"
           placeholder="请输入申请表ID"
           clearable
           @keyup.enter.native="handleQuery"
@@ -38,53 +40,6 @@
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
       </el-form-item>
     </el-form>
-
-<!--    <el-row :gutter="10" class="mb8">-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="primary"-->
-<!--          plain-->
-<!--          icon="el-icon-plus"-->
-<!--          size="mini"-->
-<!--          :disabled="multiple"-->
-<!--          @click="handlePass"-->
-<!--          v-hasPermi="['verify:benefit_list:edit']"-->
-<!--        >通过</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="success"-->
-<!--          plain-->
-<!--          icon="el-icon-edit"-->
-<!--          size="mini"-->
-<!--          :disabled="single"-->
-<!--          @click="handleDeny"-->
-<!--          v-hasPermi="['verify:benefit_list:edit']"-->
-<!--        >不通过</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="danger"-->
-<!--          plain-->
-<!--          icon="el-icon-delete"-->
-<!--          size="mini"-->
-<!--          :disabled="multiple"-->
-<!--          @click="handleReject"-->
-<!--          v-hasPermi="['verify:benefit_list:edit']"-->
-<!--        >驳回</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="warning"-->
-<!--          plain-->
-<!--          icon="el-icon-download"-->
-<!--          size="mini"-->
-<!--          @click="handleExport"-->
-<!--          v-hasPermi="['verify:verify_history:export']"-->
-<!--        >导出</el-button>-->
-<!--      </el-col>-->
-<!--      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>-->
-<!--    </el-row>-->
 
 
     <el-table v-loading="loading" :data="benefit_applyList" @selection-change="handleSelectionChange">
@@ -201,7 +156,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        applyId: null,
+        tableId: null,
         studentId: null,
         school: null,
         grade: null
